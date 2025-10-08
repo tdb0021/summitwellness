@@ -1,4 +1,3 @@
-
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -34,17 +33,16 @@ const paths = {
   staff: "/images/staff.jpg",
   services: "/images/services.jpg",
   gi: "/images/GI.jpg",
-  supplements1_jpj: "/images/supplements1.jpj",
+  // keep both; we’ll try .jpg first, then .jpj as a fallback in the rotator
   supplements1_jpg: "/images/supplements1.jpg",
+  supplements1_jpj: "/images/supplements1.jpj",
   supplements2: "/images/supplements2.jpg",
   supplements3: "/images/supplements3.jpg",
   salt: "/images/salt.jpg",
   team2: "/images/team2.jpg",
 };
 const enc = (p: string) => p.replace(/ /g, "%20");
-const IMG = Object.fromEntries(
-  Object.entries(paths).map(([k, v]) => [k, enc(v as string)])
-) as Record<string, string>;
+const IMG = Object.fromEntries(Object.entries(paths).map(([k, v]) => [k, enc(v as string)])) as Record<string, string>;
 
 const fallbackSVG = (label: string) =>
   "data:image/svg+xml;utf8," +
@@ -93,22 +91,11 @@ function ImageMulti({
   const src = fallback ?? srcs[attempt];
 
   const handleError = () => {
-    if (attempt < srcs.length - 1) {
-      setAttempt((a) => a + 1);
-    } else {
-      setFallback(fallbackSVG(fallbackLabel));
-    }
+    if (attempt < srcs.length - 1) setAttempt((a) => a + 1);
+    else setFallback(fallbackSVG(fallbackLabel));
   };
 
-  return (
-    <img
-      src={src}
-      alt={alt}
-      className={className}
-      loading={loading}
-      onError={handleError}
-    />
-  );
+  return <img src={src} alt={alt} className={className} loading={loading} onError={handleError} />;
 }
 
 const section = "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8";
@@ -116,60 +103,18 @@ const h2 = "text-3xl md:text-4xl font-semibold tracking-tight";
 const p = "text-base md:text-lg text-zinc-300";
 
 const features = [
-  {
-    icon: Droplet,
-    id: "iv",
-    title: "IV Therapy",
-    desc: "Hydration, performance, recovery, and immunity protocols. Treatment available on-site or in-home.",
-  },
-  {
-    icon: Syringe,
-    id: "injections",
-    title: "Injections",
-    desc: "High-dose Vitamin C, NAD+, B12, Super B, lipo, and more performance blends administered by licensed nurses.",
-  },
-  {
-    icon: ThermometerSnowflake,
-    id: "plunge",
-    title: "Cold Plunge",
-    desc: "Low-temp immersion for recovery and resilience. Pair with sauna for contrast therapy.",
-  },
-  {
-    icon: Flame,
-    id: "sauna",
-    title: "Full-Spectrum IR Sauna",
-    desc: "Detox, circulation, and relaxation with infrared heat across all wavelengths at temperatures up to 160 degrees.",
-  },
-  {
-    icon: HeartPulse,
-    id: "hbot",
-    title: "Hyperbaric Chamber",
-    desc: "1:1 sessions focused on recovery and healing. First-time and package discounts available.",
-  },
-  {
-    icon: Activity,
-    id: "compression",
-    title: "NormaTec Compression",
-    desc: "Air compression tech to speed recovery and reduce soreness between training blocks.",
-  },
+  { icon: Droplet, id: "iv", title: "IV Therapy", desc: "Hydration, performance, recovery, and immunity protocols. Treatment available on-site or in-home." },
+  { icon: Syringe, id: "injections", title: "Injections", desc: "High-dose Vitamin C, NAD+, B12, Super B, lipo, and more performance blends administered by licensed nurses." },
+  { icon: ThermometerSnowflake, id: "plunge", title: "Cold Plunge", desc: "Low-temp immersion for recovery and resilience. Pair with sauna for contrast therapy." },
+  { icon: Flame, id: "sauna", title: "Full-Spectrum IR Sauna", desc: "Detox, circulation, and relaxation with infrared heat across all wavelengths at temperatures up to 160 degrees." },
+  { icon: HeartPulse, id: "hbot", title: "Hyperbaric Chamber", desc: "1:1 sessions focused on recovery and healing. First-time and package discounts available." },
+  { icon: Activity, id: "compression", title: "NormaTec Compression", desc: "Air compression tech to speed recovery and reduce soreness between training blocks." },
 ] as const;
 
 const protocols = [
-  {
-    name: "Recovery Stack",
-    bullets: ["Performance IV (post-training)", "NormaTec 30 min", "Cold Plunge 5–10 min"],
-    notes: "Designed for athletes and active adults.",
-  },
-  {
-    name: "Contrast Therapy",
-    bullets: ["IR Sauna 30–45 min", "Cold Plunge 3–5 min", "Breathwork guidance"],
-    notes: "Great for resilience and metabolic benefits.",
-  },
-  {
-    name: "Hyperbaric Chamber + Rebuild",
-    bullets: ["Hyperbaric session", "B-Complex/NAD+ injection", "Hydration IV add-on"],
-    notes: "Support tissue recovery and cognitive clarity.",
-  },
+  { name: "Recovery Stack", bullets: ["Performance IV (post-training)", "NormaTec 30 min", "Cold Plunge 5–10 min"], notes: "Designed for athletes and active adults." },
+  { name: "Contrast Therapy", bullets: ["IR Sauna 30–45 min", "Cold Plunge 3–5 min", "Breathwork guidance"], notes: "Great for resilience and metabolic benefits." },
+  { name: "Hyperbaric Chamber + Rebuild", bullets: ["Hyperbaric session", "B-Complex/NAD+ injection", "Hydration IV add-on"], notes: "Support tissue recovery and cognitive clarity." },
 ] as const;
 
 const faqs = [
@@ -182,24 +127,9 @@ const faqs = [
 ] as const;
 
 const priceTiles = [
-  {
-    title: "Hyperbaric Therapy",
-    price: "$125",
-    sub: "/ session",
-    items: ["First-time discount available", "5 and 10-pack pricing", "Proven results"],
-  },
-  {
-    title: "Mobile IV Therapy",
-    price: "From $165*",
-    sub: " + call-out",
-    items: ["Hydration, Performance, Immunity", "Group/Event discounts", "Hotel, home, or gym"],
-  },
-  {
-    title: "Unlimited Recovery",
-    price: "$250",
-    sub: "/ month",
-    items: ["Unlimited Sauna + Cold Plunge", "Unlimited NormaTec Compression", "IV/Hyperbaric therapy add-on rates"],
-  },
+  { title: "Hyperbaric Therapy", price: "$125", sub: "/ session", items: ["First-time discount available", "5 and 10-pack pricing", "Proven results"] },
+  { title: "Mobile IV Therapy", price: "From $165*", sub: " + call-out", items: ["Hydration, Performance, Immunity", "Group/Event discounts", "Hotel, home, or gym"] },
+  { title: "Unlimited Recovery", price: "$250", sub: "/ month", items: ["Unlimited Sauna + Cold Plunge", "Unlimited NormaTec Compression", "IV/Hyperbaric therapy add-on rates"] },
 ] as const;
 
 const testimonials: string[] = [
@@ -212,41 +142,15 @@ const testimonials: string[] = [
 ];
 
 const functionalCards = [
-  {
-    title: "GI-MAP Testing",
-    desc: "Identify hidden gut imbalances—such as bacteria, parasites, or inflammation—that may be affecting your digestion, energy, and overall health, giving you a clear roadmap for targeted care and lasting wellness.",
-  },
-  {
-    title: "Vitamin & Micronutrient Panels",
-    desc: "Comprehensive panels measure key vitamins, minerals, and antioxidants to reveal hidden deficiencies, optimize energy, and support long-term health with a personalized plan.",
-  },
-  {
-    title: "Peptide Therapy",
-    desc: "Personalized peptide protocols to support recovery, sleep, body composition, and performance—selected by your clinician, monitored, and adjusted to your response.",
-  },
-  {
-    title: "Weight-Loss Consults",
-    desc: "Evidence-based coaching with labs-informed guidance and medication options when appropriate—built to improve energy, metabolism, and long-term habits, not just the scale.",
-  },
-  {
-    title: "NAD+ Support",
-    desc: "Targeted NAD+ injections and IV add-ons to boost cellular energy, focus, and recovery—dosed for effectiveness while minimizing side effects.",
-  },
-  {
-    title: "Customized Protocols",
-    desc: "Your Nurse Practitioner designs a step-by-step plan from your labs and goals—then refines it over time for measurable, sustainable results.",
-  },
+  { title: "GI-MAP Testing", desc: "Identify hidden gut imbalances—such as bacteria, parasites, or inflammation—that may be affecting your digestion, energy, and overall health, giving you a clear roadmap for targeted care and lasting wellness." },
+  { title: "Vitamin & Micronutrient Panels", desc: "Comprehensive panels measure key vitamins, minerals, and antioxidants to reveal hidden deficiencies, optimize energy, and support long-term health with a personalized plan." },
+  { title: "Peptide Therapy", desc: "Personalized peptide protocols to support recovery, sleep, body composition, and performance—selected by your clinician, monitored, and adjusted to your response." },
+  { title: "Weight-Loss Consults", desc: "Evidence-based coaching with labs-informed guidance and medication options when appropriate—built to improve energy, metabolism, and long-term habits, not just the scale." },
+  { title: "NAD+ Support", desc: "Targeted NAD+ injections and IV add-ons to boost cellular energy, focus, and recovery—dosed for effectiveness while minimizing side effects." },
+  { title: "Customized Protocols", desc: "Your Nurse Practitioner designs a step-by-step plan from your labs and goals—then refines it over time for measurable, sustainable results." },
 ] as const;
 
-function SectionHeader({
-  overline,
-  title,
-  desc,
-}: {
-  overline?: string;
-  title: string;
-  desc?: string;
-}) {
+function SectionHeader({ overline, title, desc }: { overline?: string; title: string; desc?: string }) {
   return (
     <div className="text-center mb-10">
       {overline && (
@@ -265,10 +169,7 @@ function FeatureGrid() {
   return (
     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
       {features.map((f) => (
-        <Card
-          key={f.title}
-          className="bg-zinc-900/60 border-zinc-800 hover:bg-zinc-900/80 transition h-full flex flex-col"
-        >
+        <Card key={f.title} className="bg-zinc-900/60 border-zinc-800 hover:bg-zinc-900/80 transition h-full flex flex-col">
           <CardHeader className="flex-none">
             <div className="flex items-center gap-3">
               <f.icon className="h-6 w-6 text-zinc-200" />
@@ -277,10 +178,7 @@ function FeatureGrid() {
           </CardHeader>
           <CardContent className="flex flex-col grow">
             <p className="text-zinc-300 leading-relaxed">{f.desc}</p>
-            <a
-              href={`#${(f as any).id}`}
-              className="mt-auto self-end inline-flex items-center gap-1 text-zinc-200 hover:text-white font-semibold"
-            >
+            <a href={`#${(f as any).id}`} className="mt-auto self-end inline-flex items-center gap-1 text-zinc-200 hover:text-white font-semibold">
               Learn More <span aria-hidden="true">→</span>
             </a>
           </CardContent>
@@ -404,6 +302,8 @@ function ContactForm() {
     </div>
   );
 }
+
+/** Hover-to-play video with image poster fallback */
 function HoverVideoPoster({
   poster,
   videoSrc,
@@ -421,7 +321,6 @@ function HoverVideoPoster({
   const containerRef = React.useRef<HTMLDivElement>(null);
   const videoRef = React.useRef<HTMLVideoElement>(null);
 
-  // Respect prefers-reduced-motion
   React.useEffect(() => {
     const mq = window.matchMedia?.("(prefers-reduced-motion: reduce)");
     const set = () => setReduced(!!mq?.matches);
@@ -430,28 +329,23 @@ function HoverVideoPoster({
     return () => mq?.removeEventListener?.("change", set);
   }, []);
 
-  // Pause when not visible (saves battery/CPU)
   React.useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
-    const io = new IntersectionObserver(
-      (entries) => {
-        const visible = entries[0]?.isIntersecting;
-        if (!visible && videoRef.current) {
-          videoRef.current.pause();
-          videoRef.current.currentTime = 0;
-          setPlaying(false);
-        }
-      },
-      { threshold: 0.3 }
-    );
+    const io = new IntersectionObserver((entries) => {
+      const visible = entries[0]?.isIntersecting;
+      if (!visible && videoRef.current) {
+        videoRef.current.pause();
+        videoRef.current.currentTime = 0;
+        setPlaying(false);
+      }
+    }, { threshold: 0.3 });
     io.observe(el);
     return () => io.disconnect();
   }, []);
 
   const start = () => {
-    if (reduced) return; // honor user preference
-    if (!videoRef.current) return;
+    if (reduced || !videoRef.current) return;
     videoRef.current.play().catch(() => {});
     setPlaying(true);
   };
@@ -469,17 +363,9 @@ function HoverVideoPoster({
       className={`relative ${className ?? ""}`}
       onMouseEnter={start}
       onMouseLeave={stop}
-      onTouchStart={toggleTouch} // tap to play/pause on mobile
+      onTouchStart={toggleTouch}
     >
-      {/* Base image (always there) */}
-      <img
-        src={poster}
-        alt={alt}
-        className="absolute inset-0 h-full w-full object-cover"
-        loading="lazy"
-      />
-
-      {/* Video layer (fades in on hover) */}
+      <img src={poster} alt={alt} className="absolute inset-0 h-full w-full object-cover" loading="lazy" />
       <video
         ref={videoRef}
         className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-300 ${
@@ -491,14 +377,11 @@ function HoverVideoPoster({
         loop
         poster={poster}
         onCanPlay={() => setCanPlay(true)}
-        // Optional: keep it clickable but don't capture scroll
         tabIndex={-1}
         aria-label={alt}
       >
         <source src={videoSrc} type="video/mp4" />
       </video>
-
-      {/* Subtle overlay for readability parity with images */}
       <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/20 via-transparent to-black/10" />
     </div>
   );
@@ -532,34 +415,52 @@ function ServiceBlock({
   return (
     <section id={id} className={`${section} py-12 md:py-16`}>
       <div className={`grid lg:grid-cols-2 gap-10 items-center ${reverse ? "lg:[&>*:first-child]:order-2" : ""}`}>
-        {/* Media */}
         <div className="relative aspect-[16/9] rounded-2xl overflow-hidden border border-zinc-800 shadow-2xl">
           {videoSrc ? (
-            <HoverVideoPoster
-              poster={imageSrc}
-              videoSrc={videoSrc}
-              alt={imageAlt}
-              className="absolute inset-0"
-            />
+            <HoverVideoPoster poster={imageSrc} videoSrc={videoSrc} alt={imageAlt} className="absolute inset-0" />
           ) : (
-            <ImageWithFallback
-              src={imageSrc}
-              alt={imageAlt}
-              fallbackLabel={title}
-              className="absolute inset-0 h-full w-full object-cover"
-            />
+            <ImageWithFallback src={imageSrc} alt={imageAlt} fallbackLabel={title} className="absolute inset-0 h-full w-full object-cover" />
           )}
         </div>
 
-        {/* Text + CTAs ... (unchanged) */}
-        {/* ... */}
+        <div>
+          <h3 className="text-2xl md:text-3xl font-semibold text-white">{title}</h3>
+          <p className={`${p} mt-3`}>{desc}</p>
+          <ul className="mt-5 space-y-2 text-zinc-300">
+            {bullets.map((b) => (
+              <li key={b} className="flex items-start gap-2">
+                <Check className="h-5 w-5 shrink-0" /> <span>{b}</span>
+              </li>
+            ))}
+          </ul>
+          {typeof extra === "string" ? <p className="text-zinc-300 mt-4">{extra}</p> : extra}
+          <div className="mt-6 flex flex-wrap gap-3">
+            {primaryCta && (
+              <Button asChild>
+                <a href="#contact">{primaryCta}</a>
+              </Button>
+            )}
+            {secondaryCta && (
+              <Button asChild variant="outline" className="border-zinc-700 text-zinc-200 hover:bg-zinc-900">
+                <a href="#contact">{secondaryCta}</a>
+              </Button>
+            )}
+          </div>
+        </div>
       </div>
     </section>
   );
 }
 
+/** Image rotator with fallback for the ‘supplements1.jpj’ slip */
 function FunctionalRotator() {
-  const slides: string[][] = [[IMG.gi], [IMG.supplements1_jpg], [IMG.supplements2], [IMG.supplements3], [IMG.salt]];
+  const slides: string[][] = [
+    [IMG.gi],
+    [IMG.supplements1_jpg, IMG.supplements1_jpj], // try .jpg, then .jpj if that’s the saved file
+    [IMG.supplements2],
+    [IMG.supplements3],
+    [IMG.salt],
+  ];
   const [idx, setIdx] = React.useState(0);
   const [dir, setDir] = React.useState(1);
 
@@ -581,7 +482,6 @@ function FunctionalRotator() {
 
   return (
     <div className="relative aspect-[21/9] rounded-2xl overflow-hidden border border-zinc-800">
-      {/* Preload the next image */}
       <img src={nextSrc} alt="" className="hidden" />
       <AnimatePresence initial={false} custom={dir}>
         <motion.div
@@ -647,7 +547,6 @@ function ServicesDropdown() {
   const [open, setOpen] = React.useState(false);
   const ref = React.useRef<HTMLDivElement | null>(null);
 
-  // Close on outside click
   React.useEffect(() => {
     const onDocClick = (e: MouseEvent) => {
       if (!ref.current) return;
@@ -657,7 +556,6 @@ function ServicesDropdown() {
     return () => document.removeEventListener("click", onDocClick);
   }, []);
 
-  // Close on Escape
   React.useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setOpen(false);
@@ -666,7 +564,6 @@ function ServicesDropdown() {
     return () => document.removeEventListener("keydown", onKey);
   }, []);
 
-  // Close after smooth-scroll navigation completes
   React.useEffect(() => {
     const onHash = () => setOpen(false);
     window.addEventListener("hashchange", onHash);
@@ -683,13 +580,9 @@ function ServicesDropdown() {
         aria-expanded={open}
       >
         Services
-        <ChevronDown
-          className={`h-4 w-4 transition-transform ${open ? "rotate-180" : ""}`}
-          aria-hidden="true"
-        />
+        <ChevronDown className={`h-4 w-4 transition-transform ${open ? "rotate-180" : ""}`} aria-hidden="true" />
       </button>
 
-      {/* Menu */}
       <div
         role="menu"
         className={`absolute left-0 top-full mt-2 min-w-[240px] rounded-xl border border-zinc-800 bg-zinc-950/95 backdrop-blur shadow-xl p-2 ${
@@ -712,7 +605,6 @@ function ServicesDropdown() {
   );
 }
 
-
 export default function SummitWellnessSite() {
   useSmoothAnchors(80);
   return (
@@ -724,20 +616,12 @@ export default function SummitWellnessSite() {
           </div>
           <nav className="hidden md:flex items-center gap-6 text-sm text-zinc-200">
             <ServicesDropdown />
-            <a href="#packages" className="hover:text-white">
-              Packages
-            </a>
-            <a href="#pricing" className="hover:text-white">
-              Pricing
-            </a>
-            <a href="#contact" className="hover:text-white">
-              Contact
-            </a>
+            <a href="#packages" className="hover:text-white">Packages</a>
+            <a href="#pricing" className="hover:text-white">Pricing</a>
+            <a href="#contact" className="hover:text-white">Contact</a>
           </nav>
           <div className="flex items-center gap-2">
-            <Button asChild className="hidden md:inline-flex">
-              <a href="#contact">Book Now</a>
-            </Button>
+            <Button asChild className="hidden md:inline-flex"><a href="#contact">Book Now</a></Button>
           </div>
         </div>
       </header>
@@ -749,63 +633,29 @@ export default function SummitWellnessSite() {
               Performance & Recovery, <span className="text-zinc-300">Done Right</span>
             </h1>
             <p className={`${p} mt-6 max-w-2xl`}>
-              IVs, injections, contrast therapy, hyperbaric oxygen, and compression—built for active locals and high-performance
-              travelers. Mobile nurses available.
+              IVs, injections, contrast therapy, hyperbaric oxygen, and compression—built for active locals and high-performance travelers. Mobile nurses available.
             </p>
             <div className="flex flex-wrap gap-3 mt-8">
-              <Button asChild>
-                <a href="#contact">Book an IV</a>
-              </Button>
-              <Button asChild variant="outline" className="border-zinc-700 text-zinc-200 hover:bg-zinc-900">
-                <a href="#contact">Explore Memberships</a>
-              </Button>
+              <Button asChild><a href="#contact">Book an IV</a></Button>
+              <Button asChild variant="outline" className="border-zinc-700 text-zinc-200 hover:bg-zinc-900"><a href="#contact">Explore Memberships</a></Button>
             </div>
             <div className="mt-6 flex items-center gap-4 text-zinc-400 text-sm">
-              <div className="flex items-center gap-2">
-                <Timer className="h-4 w-4" />
-                Same-day mobile slots
-              </div>
-              <div className="flex items-center gap-2">
-                <Users className="h-4 w-4" />
-                Group & event rates
-              </div>
+              <div className="flex items-center gap-2"><Timer className="h-4 w-4" />Same-day mobile slots</div>
+              <div className="flex items-center gap-2"><Users className="h-4 w-4" />Group & event rates</div>
             </div>
           </motion.div>
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.15, duration: 0.8 }}>
             <div className="relative aspect-[4/3] rounded-2xl overflow-hidden border border-zinc-800 shadow-2xl">
-              <ImageWithFallback
-                src={IMG.hero}
-                fallbackLabel="Summit"
-                alt="Summit Wellness"
-                className="absolute inset-0 h-full w-full object-cover"
-              />
+              <ImageWithFallback src={IMG.hero} fallbackLabel="Summit" alt="Summit Wellness" className="absolute inset-0 h-full w-full object-cover" />
               <div className="absolute inset-0 bg-gradient-to-tr from-black/50 via-transparent to-black/30" />
             </div>
             <div className="mt-4 grid grid-cols-3 gap-4 text-sm">
-              <div className="bg-zinc-900/60 rounded-xl p-4 border border-zinc-800">
-                <Droplet className="h-5 w-5 mb-2" />
-                IV Therapy
-              </div>
-              <div className="bg-zinc-900/60 rounded-xl p-4 border border-zinc-800">
-                <HeartPulse className="h-5 w-5 mb-2" />
-                Hyperbaric Chamber
-              </div>
-              <div className="bg-zinc-900/60 rounded-xl p-4 border border-zinc-800">
-                <ThermometerSnowflake className="h-5 w-5 mb-2" />
-                Cold Plunge
-              </div>
-              <div className="bg-zinc-900/60 rounded-xl p-4 border border-zinc-800">
-                <Flame className="h-5 w-5 mb-2" />
-                IR Sauna
-              </div>
-              <div className="bg-zinc-900/60 rounded-xl p-4 border border-zinc-800">
-                <Activity className="h-5 w-5 mb-2" />
-                Compression
-              </div>
-              <div className="bg-zinc-900/60 rounded-xl p-4 border border-zinc-800">
-                <Syringe className="h-5 w-5 mb-2" />
-                Injections
-              </div>
+              <div className="bg-zinc-900/60 rounded-xl p-4 border border-zinc-800"><Droplet className="h-5 w-5 mb-2" />IV Therapy</div>
+              <div className="bg-zinc-900/60 rounded-xl p-4 border border-zinc-800"><HeartPulse className="h-5 w-5 mb-2" />Hyperbaric Chamber</div>
+              <div className="bg-zinc-900/60 rounded-xl p-4 border border-zinc-800"><ThermometerSnowflake className="h-5 w-5 mb-2" />Cold Plunge</div>
+              <div className="bg-zinc-900/60 rounded-xl p-4 border border-zinc-800"><Flame className="h-5 w-5 mb-2" />IR Sauna</div>
+              <div className="bg-zinc-900/60 rounded-xl p-4 border border-zinc-800"><Activity className="h-5 w-5 mb-2" />Compression</div>
+              <div className="bg-zinc-900/60 rounded-xl p-4 border border-zinc-800"><Syringe className="h-5 w-5 mb-2" />Injections</div>
             </div>
           </motion.div>
         </div>
@@ -816,27 +666,15 @@ export default function SummitWellnessSite() {
         <div className="grid lg:grid-cols-3 gap-6 items-stretch">
           <Card className="lg:col-span-2 bg-zinc-900/60 border-zinc-800 overflow-hidden">
             <div className="relative aspect-[16/9]">
-              <ImageWithFallback
-                src={IMG.services}
-                fallbackLabel="Services"
-                alt="Summit Wellness services"
-                className="absolute inset-0 h-full w-full object-cover"
-              />
+              <ImageWithFallback src={IMG.services} fallbackLabel="Services" alt="Summit Wellness services" className="absolute inset-0 h-full w-full object-cover" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
             </div>
-            <CardContent className="pt-6">
-              <FeatureGrid />
-            </CardContent>
+            <CardContent className="pt-6"><FeatureGrid /></CardContent>
           </Card>
 
           <Card className="bg-zinc-900/60 border-zinc-800 overflow-hidden flex flex-col">
             <div className="relative aspect-[16/14]">
-              <ImageWithFallback
-                src={IMG.staff}
-                fallbackLabel="Team"
-                alt="Summit Wellness staff"
-                className="absolute inset-0 h-full w-full object-cover"
-              />
+              <ImageWithFallback src={IMG.staff} fallbackLabel="Team" alt="Summit Wellness staff" className="absolute inset-0 h-full w-full object-cover" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
             </div>
             <CardContent className="pt-6 text-zinc-300 flex-1">
@@ -855,12 +693,7 @@ export default function SummitWellnessSite() {
               </p>
             </CardContent>
             <div className="relative aspect-[16/9]">
-              <ImageWithFallback
-                src={IMG.team2}
-                fallbackLabel="Team"
-                alt="Summit Wellness team"
-                className="absolute inset-0 h-full w-full object-cover"
-              />
+              <ImageWithFallback src={IMG.team2} fallbackLabel="Team" alt="Summit Wellness team" className="absolute inset-0 h-full w-full object-cover" />
               <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/40" />
             </div>
           </Card>
@@ -870,11 +703,7 @@ export default function SummitWellnessSite() {
       <section id="packages" className={`${section} py-12 md:py-16`}>
         <SectionHeader overline="Curated Bundles" title="Protocols & Packages" desc="Proven stacks for recovery, resilience, and cognitive clarity." />
         <ProtocolCards />
-        <div className="mt-8 text-center">
-          <Button asChild>
-            <a href="#contact">See Membership Options</a>
-          </Button>
-        </div>
+        <div className="mt-8 text-center"><Button asChild><a href="#contact">See Membership Options</a></Button></div>
       </section>
 
       <ServiceBlock
@@ -899,14 +728,8 @@ export default function SummitWellnessSite() {
         videoSrc="/videos/injections.mp4"
         extra={
           <>
-            <p>
-              Our injection therapies deliver targeted nutrients and medications in minutes—no IV required. From easing pain or nausea to
-              boosting energy, metabolism, and immunity, injections are a fast way to feel your best.
-            </p>
-            <p className="mt-3">
-              Options include: Pepcid, Zofran, Toradol, CoQ10, Vitamin D, Vitamin C, Super B + MIC, Glutathione, and NAD+. Each works to support
-              energy, recovery, wellness, and overall performance—so you can get back to living at full speed.
-            </p>
+            <p>Our injection therapies deliver targeted nutrients and medications in minutes—no IV required. From easing pain or nausea to boosting energy, metabolism, and immunity, injections are a fast way to feel your best.</p>
+            <p className="mt-3">Options include: Pepcid, Zofran, Toradol, CoQ10, Vitamin D, Vitamin C, Super B + MIC, Glutathione, and NAD+. Each works to support energy, recovery, wellness, and overall performance—so you can get back to living at full speed.</p>
           </>
         }
         reverse
@@ -935,16 +758,8 @@ export default function SummitWellnessSite() {
         videoSrc="/videos/sauna.mp4"
         extra={
           <>
-            <p>
-              Unlike traditional saunas that heat the air around you, infrared saunas use light waves to warm your body directly. This deeper
-              penetration helps improve circulation, loosen tight muscles, and promote detox at the cellular level—all while operating at a more
-              comfortable temperature.
-            </p>
-            <p className="mt-3">
-              Infrared therapy is known to support recovery, reduce inflammation, improve skin health, and even enhance metabolism. Clients often
-              report better sleep, lower stress, and an overall sense of renewal after each session. The gentle, penetrating heat works with your
-              body—not against it—so you leave feeling lighter, clearer, and recharged.
-            </p>
+            <p>Unlike traditional saunas that heat the air around you, infrared saunas use light waves to warm your body directly. This deeper penetration helps improve circulation, loosen tight muscles, and promote detox at the cellular level—all while operating at a more comfortable temperature.</p>
+            <p className="mt-3">Infrared therapy is known to support recovery, reduce inflammation, improve skin health, and even enhance metabolism. Clients often report better sleep, lower stress, and an overall sense of renewal after each session. The gentle, penetrating heat works with your body—not against it—so you leave feeling lighter, clearer, and recharged.</p>
           </>
         }
         reverse
@@ -961,15 +776,8 @@ export default function SummitWellnessSite() {
         videoSrc="/videos/hyperbaric.mp4"
         extra={
           <>
-            <p>
-              Inside a hyperbaric chamber, you breathe 100% oxygen at increased pressure, allowing your lungs to absorb far more oxygen than
-              normal. This surge delivers oxygen-rich blood to tissues and unlocks your body’s natural ability to heal at a faster rate.
-            </p>
-            <p className="mt-3">
-              Hyperbaric therapy supports recovery from injury, reduces inflammation, boosts energy, and promotes overall wellness. Many clients
-              notice improved focus, faster recovery times, and enhanced resilience. By flooding your system with oxygen, Hyperbaric therapy helps
-              your body repair, restore, and perform at its best.
-            </p>
+            <p>Inside a hyperbaric chamber, you breathe 100% oxygen at increased pressure, allowing your lungs to absorb far more oxygen than normal. This surge delivers oxygen-rich blood to tissues and unlocks your body’s natural ability to heal at a faster rate.</p>
+            <p className="mt-3">Hyperbaric therapy supports recovery from injury, reduces inflammation, boosts energy, and promotes overall wellness. Many clients notice improved focus, faster recovery times, and enhanced resilience. By flooding your system with oxygen, Hyperbaric therapy helps your body repair, restore, and perform at its best.</p>
           </>
         }
         primaryCta="Book Hyperbaric Therapy"
@@ -986,56 +794,31 @@ export default function SummitWellnessSite() {
         reverse
         extra={
           <>
-            <p>
-              NormaTec compression uses dynamic air pressure to massage your legs, hips, or arms in rhythmic waves—improving circulation, flushing
-              out toxins, and reducing muscle soreness. This active recovery method speeds healing, reduces swelling, and leaves your body feeling
-              refreshed and recharged.
-            </p>
-            <p className="mt-3">
-              Many athletes and busy professionals use compression therapy to bounce back faster, fight fatigue, and keep moving at their best.
-              Just one session can help you feel lighter, looser, and ready for whatever comes next.
-            </p>
+            <p>NormaTec compression uses dynamic air pressure to massage your legs, hips, or arms in rhythmic waves—improving circulation, flushing out toxins, and reducing muscle soreness. This active recovery method speeds healing, reduces swelling, and leaves your body feeling refreshed and recharged.</p>
+            <p className="mt-3">Many athletes and busy professionals use compression therapy to bounce back faster, fight fatigue, and keep moving at their best. Just one session can help you feel lighter, looser, and ready for whatever comes next.</p>
           </>
         }
         primaryCta="Book Compression"
       />
 
       <section id="functional" className={`${section} py-12 md:py-16`}>
-        <SectionHeader
-          overline="Long-Term Health"
-          title="Functional Medicine & Testing"
-          desc="Move beyond quick fixes. We identify root causes and build targeted protocols."
-        />
+        <SectionHeader overline="Long-Term Health" title="Functional Medicine & Testing" desc="Move beyond quick fixes. We identify root causes and build targeted protocols." />
         <FunctionalRotator />
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
           {functionalCards.map((b) => (
             <Card key={b.title} className="bg-zinc-900/60 border-zinc-800">
-              <CardHeader>
-                <CardTitle className="text-zinc-100">{b.title}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-zinc-300">{b.desc}</p>
-              </CardContent>
+              <CardHeader><CardTitle className="text-zinc-100">{b.title}</CardTitle></CardHeader>
+              <CardContent><p className="text-zinc-300">{b.desc}</p></CardContent>
             </Card>
           ))}
         </div>
-        <div className="text-center mt-8">
-          <Button asChild>
-            <a href="#contact">Book a Consult</a>
-          </Button>
-        </div>
+        <div className="text-center mt-8"><Button asChild><a href="#contact">Book a Consult</a></Button></div>
       </section>
 
       <section id="pricing" className={`${section} py-12 md:py-16`}>
-        <SectionHeader
-          overline="Transparent"
-          title="Sample Pricing"
-          desc="Exact pricing varies by formulation, duration, and membership status."
-        />
+        <SectionHeader overline="Transparent" title="Sample Pricing" desc="Exact pricing varies by formulation, duration, and membership status." />
         <PriceTiles />
-        <p className="text-center text-sm text-zinc-400 mt-6">
-          * Mobile visits may include travel/call-out fees. Contact us for a precise quote.
-        </p>
+        <p className="text-center text-sm text-zinc-400 mt-6">* Mobile visits may include travel/call-out fees. Contact us for a precise quote.</p>
       </section>
 
       {testimonials.length > 0 && (
@@ -1054,11 +837,7 @@ export default function SummitWellnessSite() {
       )}
 
       <section id="contact" className={`${section} py-12 md:py-20`}>
-        <SectionHeader
-          overline="Get In Touch"
-          title="Questions, Teams, Events"
-          desc="Tell us what you need—same-day options often available for mobile IVs and recovery sessions."
-        />
+        <SectionHeader overline="Get In Touch" title="Questions, Teams, Events" desc="Tell us what you need—same-day options often available for mobile IVs and recovery sessions." />
         <ContactForm />
       </section>
 
@@ -1082,7 +861,7 @@ export default function SummitWellnessSite() {
           </div>
           <div>
             <div className="text-zinc-300 font-medium mb-3">Programs</div>
-            <ul className="space-y-2 text-zinc-400">
+            <ul className="space-y-2 text-zinc-4 00">
               <li>Memberships (Unlimited)</li>
               <li>Protocols & Packages</li>
               <li>Functional Medicine</li>
@@ -1105,7 +884,7 @@ export default function SummitWellnessSite() {
   );
 }
 
-// Minimal smoke tests
+// Minimal smoke tests (unchanged)
 (function () {
   try {
     ["logo", "hero", "iv", "injections", "plunge", "sauna", "hbot", "compression"].forEach((k) => {
