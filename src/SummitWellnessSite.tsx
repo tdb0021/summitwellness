@@ -511,7 +511,6 @@ function ServiceBlock({
   secondaryCta,
   extra,
   videoSrc,
-  // NEW: control the centered header bar
   overline = "SERVICE",
   showCenteredHeader = true,
 }: {
@@ -545,42 +544,35 @@ function ServiceBlock({
 
       <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
         {/* MEDIA COLUMN */}
-        
-      const isMdDown = useMediaQuery('(max-width: 768px)');   // tablets & phones
-      const isSmDown = useMediaQuery('(max-width: 640px)');   // phones
-
-        
-        let minH = 360;           // desktop
-        if (isMdDown) minH = 260; // tablets
-        if (isSmDown) minH = 200; // phones
-
-      <div
-       className="relative w-full max-w-full rounded-2xl overflow-hidden border border-zinc-800 shadow-2xl z-0"
-        style={{ aspectRatio: '16 / 9', minHeight: minH }}>
-     {videoSrc ? (
-    <HoverVideoPoster
-      poster={imageSrc}
-      videoSrc={videoSrc}
-      alt={imageAlt}
-      fallbackLabel={title}
-      className="absolute inset-0"
-    />
-  ) : (
-      <ImageWithFallback
-      src={imageSrc}
-      alt={imageAlt}
-      fallbackLabel={title}
-      className="block h-full w-full object-cover"
-      loading="eager"
-      />
-      )}
-    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-black/10" />
-  </div>
-
+        <div className={`min-w-0 ${reverse ? "lg:order-2" : ""}`}>
+          <div
+            className="relative w-full max-w-full rounded-2xl overflow-hidden border border-zinc-800 shadow-2xl z-0"
+            // clamp(min, preferred, max): keeps phones compact, desktop tall, no wasted space
+            style={{ aspectRatio: "16 / 9", minHeight: "clamp(200px, 45vw, 360px)" }}
+          >
+            {videoSrc ? (
+              <HoverVideoPoster
+                poster={imageSrc}
+                videoSrc={videoSrc}
+                alt={imageAlt}
+                fallbackLabel={title}
+                className="absolute inset-0"
+              />
+            ) : (
+              <ImageWithFallback
+                src={imageSrc}
+                alt={imageAlt}
+                fallbackLabel={title}
+                className="block h-full w-full object-cover"
+                loading="eager"
+              />
+            )}
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-black/10" />
+          </div>
+        </div>
 
         {/* TEXT COLUMN */}
         <div className={`min-w-0 ${reverse ? "lg:order-1" : ""}`}>
-          {/* When the centered header is shown above, skip repeating title/desc here */}
           {!showCenteredHeader && (
             <>
               <div className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.22em] text-zinc-400">
@@ -600,11 +592,7 @@ function ServiceBlock({
             ))}
           </ul>
 
-          {typeof extra === "string" ? (
-            <p className="text-zinc-300 mt-4">{extra}</p>
-          ) : (
-            extra
-          )}
+          {typeof extra === "string" ? <p className="text-zinc-300 mt-4">{extra}</p> : extra}
 
           <div className="mt-6 flex flex-wrap gap-3">
             {primaryCta && (
@@ -613,11 +601,7 @@ function ServiceBlock({
               </Button>
             )}
             {secondaryCta && (
-              <Button
-                asChild
-                variant="outline"
-                className="border-zinc-700 text-zinc-200 hover:bg-zinc-900"
-              >
+              <Button asChild variant="outline" className="border-zinc-700 text-zinc-200 hover:bg-zinc-900">
                 <a href="#contact">{secondaryCta}</a>
               </Button>
             )}
@@ -627,6 +611,7 @@ function ServiceBlock({
     </section>
   );
 }
+
 
 import { Instagram, Youtube, Facebook, Music2 } from "lucide-react";
 
