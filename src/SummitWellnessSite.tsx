@@ -607,6 +607,37 @@ function ServiceBlock({
   );
 }
 
+import { Instagram, Youtube, Facebook, Music2 } from "lucide-react";
+
+/** Compact white social icons for the header */
+function SocialLinks() {
+  const links = [
+    { href: "https://www.instagram.com/summit.wellness.oba", label: "Instagram", Icon: Instagram },
+    { href: "https://www.youtube.com/@SummitWellnessOBA",     label: "YouTube",   Icon: Youtube   },
+    { href: "https://www.tiktok.com/@summit.wellness.oba",    label: "TikTok",    Icon: Music2    }, // musical note icon
+    { href: "https://www.facebook.com/summitwellnessoba",     label: "Facebook",  Icon: Facebook  },
+  ];
+
+  return (
+    <div className="flex items-center gap-1">
+      {links.map(({ href, label, Icon }) => (
+        <a
+          key={label}
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={label}
+          className="p-2 rounded-full text-white/80 hover:text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/20"
+          title={label}
+        >
+          <Icon className="h-5 w-5" strokeWidth={2} />
+        </a>
+      ))}
+    </div>
+  );
+}
+
+
 /** Image rotator with fallback for the ‘supplements1.jpj’ slip */
 function FunctionalRotator() {
   const slides: string[][] = [
@@ -776,8 +807,12 @@ export default function SummitWellnessSite() {
             <a href="#contact" className="hover:text-white">Contact</a>
           </nav>
           <div className="flex items-center gap-2">
-            <Button asChild className="hidden md:inline-flex"><a href="#contact">Book Now</a></Button>
+            <SocialLinks />
+            <Button asChild className="ml-1">
+              <a href="#contact">Book Now</a>
+            </Button>
           </div>
+
         </div>
       </header>
 
