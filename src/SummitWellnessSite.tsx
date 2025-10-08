@@ -437,6 +437,7 @@ function ServiceBlock({
       <div className={`grid lg:grid-cols-2 gap-10 items-center ${reverse ? "lg:[&>*:first-child]:order-2" : ""}`}>
         <div className="relative rounded-2xl overflow-hidden border border-zinc-800 shadow-2xl
              min-h-[260px] sm:min-h-[320px] md:min-h-[380px] lg:min-h-[420px] [aspect-ratio:16/9]"
+>
   {videoSrc ? (
     <HoverVideoPoster
       poster={imageSrc}
