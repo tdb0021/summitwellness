@@ -423,6 +423,9 @@ function ServiceBlock({
   secondaryCta,
   extra,
   videoSrc,
+  // NEW: control the centered header bar
+  overline = "SERVICE",
+  showCenteredHeader = true,
 }: {
   id: string;
   title: string;
@@ -435,9 +438,23 @@ function ServiceBlock({
   secondaryCta?: string;
   extra?: React.ReactNode;
   videoSrc?: string;
+  overline?: string;
+  showCenteredHeader?: boolean;
 }) {
   return (
     <section id={id} className={`${section} py-12 md:py-16`}>
+      {/* Centered service header (chip + title + desc) */}
+      {showCenteredHeader && (
+        <div className="text-center mb-8 md:mb-10">
+          <div className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.22em] text-zinc-400">
+            <Sparkles className="h-4 w-4" />
+            {overline}
+          </div>
+          <h2 className="mt-2 text-3xl md:text-4xl font-semibold text-white">{title}</h2>
+          <p className={`${p} mt-3 max-w-3xl mx-auto`}>{desc}</p>
+        </div>
+      )}
+
       <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
         {/* MEDIA COLUMN */}
         <div className={`min-w-0 ${reverse ? "lg:order-2" : ""}`}>
@@ -467,10 +484,18 @@ function ServiceBlock({
 
         {/* TEXT COLUMN */}
         <div className={`min-w-0 ${reverse ? "lg:order-1" : ""}`}>
-          <h3 className="text-2xl md:text-3xl font-semibold text-white break-words">
-            {title}
-          </h3>
-          <p className={`${p} mt-3`}>{desc}</p>
+          {/* When the centered header is shown above, skip repeating title/desc here */}
+          {!showCenteredHeader && (
+            <>
+              <div className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.22em] text-zinc-400">
+                <Sparkles className="h-4 w-4" />
+                {overline}
+              </div>
+              <h3 className="text-2xl md:text-3xl font-semibold text-white mt-2">{title}</h3>
+              <p className={`${p} mt-3`}>{desc}</p>
+            </>
+          )}
+
           <ul className="mt-5 space-y-2 text-zinc-300">
             {bullets.map((b) => (
               <li key={b} className="flex items-start gap-2">
@@ -478,11 +503,13 @@ function ServiceBlock({
               </li>
             ))}
           </ul>
+
           {typeof extra === "string" ? (
             <p className="text-zinc-300 mt-4">{extra}</p>
           ) : (
             extra
           )}
+
           <div className="mt-6 flex flex-wrap gap-3">
             {primaryCta && (
               <Button asChild>
@@ -504,7 +531,6 @@ function ServiceBlock({
     </section>
   );
 }
-
 
 /** Image rotator with fallback for the ‘supplements1.jpj’ slip */
 function FunctionalRotator() {
