@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Menu as MenuIcon, X as XIcon } from "lucide-react";
 import {
   Check,
   Droplet,
@@ -49,6 +50,19 @@ const fallbackSVG = (label: string) =>
   encodeURIComponent(
     `<?xml version='1.0'?><svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 720'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='#0a0a0a'/><stop offset='1' stop-color='#18181b'/></linearGradient></defs><rect width='1200' height='720' fill='url(#g)'/><text x='50%' y='50%' fill='#a1a1aa' font-size='42' font-family='system-ui,Segoe UI,Roboto' text-anchor='middle' dominant-baseline='middle'>${label}</text></svg>`
   );
+
+function useMediaQuery(query: string) {
+  const [matches, set] = React.useState(false);
+  React.useEffect(() => {
+    const mq = window.matchMedia(query);
+    const on = (e: MediaQueryListEvent | MediaQueryList) => set('matches' in e ? e.matches : (e as MediaQueryList).matches);
+    on(mq);
+    mq.addEventListener?.('change', on as any);
+    return () => mq.removeEventListener?.('change', on as any);
+  }, [query]);
+  return matches;
+}
+
 
 function ImageWithFallback({
   src,
@@ -426,7 +440,7 @@ function HoverVideoPoster({
 
   const start = () => {
     if (reduced || !videoRef.current) return;
-    videoRef.current.play().catch(() => {});
+    videoRef.current.play().catch(() => { });
     setPlaying(true);
   };
   const stop = () => {
@@ -463,22 +477,36 @@ function HoverVideoPoster({
       {/* Only the video is layered; poster is handled by background */}
       <video
         ref={videoRef}
-        className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-300 ${
-          playing && ready && !reduced ? "opacity-100" : "opacity-0"
-        }`}
+        className={`absolute transition-opacity duration-300 ${playing && ready && !reduced ? "opacity-100" : "opacity-0"
+          }`}
+        // Overscan + slight scale to kill seams on *any* edge
+        style={{
+          // start bigger than the container
+          top: -1, left: -1,
+          width: "calc(100% + 2px)",
+          height: "calc(100% + 2px)",
+          objectFit: "cover",
+          // eliminate right-edge hairline on iOS/Android by scaling ~1%
+          transform: "translateZ(0) scale(1.01)",
+          WebkitTransform: "translateZ(0) scale(1.01)",
+          transformOrigin: "center center",
+          willChange: "opacity, transform",
+        }}
         muted
         playsInline
         preload="metadata"
         loop
-        // poster still helps some browsers, but background ensures visibility
         poster={poster}
         onCanPlay={() => setReady(true)}
         onLoadedData={() => setReady(true)}
         onError={() => { setReady(false); setPlaying(false); }}
         tabIndex={-1}
+        aria-label={alt}
       >
         <source src={videoSrc} type="video/mp4" />
       </video>
+
+
 
       {/* Subtle overlay */}
       <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/20 via-transparent to-black/10" />
@@ -498,7 +526,6 @@ function ServiceBlock({
   secondaryCta,
   extra,
   videoSrc,
-  // NEW: control the centered header bar
   overline = "SERVICE",
   showCenteredHeader = true,
 }: {
@@ -535,7 +562,8 @@ function ServiceBlock({
         <div className={`min-w-0 ${reverse ? "lg:order-2" : ""}`}>
           <div
             className="relative w-full max-w-full rounded-2xl overflow-hidden border border-zinc-800 shadow-2xl z-0"
-            style={{ aspectRatio: "16 / 9", minHeight: 360 }}
+            // clamp(min, preferred, max): keeps phones compact, desktop tall, no wasted space
+            style={{ aspectRatio: "16 / 9", minHeight: "clamp(200px, 45vw, 360px)" }}
           >
             {videoSrc ? (
               <HoverVideoPoster
@@ -551,6 +579,7 @@ function ServiceBlock({
                 alt={imageAlt}
                 fallbackLabel={title}
                 className="block h-full w-full object-cover"
+                loading="eager"
               />
             )}
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-black/10" />
@@ -559,7 +588,6 @@ function ServiceBlock({
 
         {/* TEXT COLUMN */}
         <div className={`min-w-0 ${reverse ? "lg:order-1" : ""}`}>
-          {/* When the centered header is shown above, skip repeating title/desc here */}
           {!showCenteredHeader && (
             <>
               <div className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.22em] text-zinc-400">
@@ -579,11 +607,7 @@ function ServiceBlock({
             ))}
           </ul>
 
-          {typeof extra === "string" ? (
-            <p className="text-zinc-300 mt-4">{extra}</p>
-          ) : (
-            extra
-          )}
+          {typeof extra === "string" ? <p className="text-zinc-300 mt-4">{extra}</p> : extra}
 
           <div className="mt-6 flex flex-wrap gap-3">
             {primaryCta && (
@@ -592,11 +616,7 @@ function ServiceBlock({
               </Button>
             )}
             {secondaryCta && (
-              <Button
-                asChild
-                variant="outline"
-                className="border-zinc-700 text-zinc-200 hover:bg-zinc-900"
-              >
+              <Button asChild variant="outline" className="border-zinc-700 text-zinc-200 hover:bg-zinc-900">
                 <a href="#contact">{secondaryCta}</a>
               </Button>
             )}
@@ -606,6 +626,38 @@ function ServiceBlock({
     </section>
   );
 }
+
+
+import { Instagram, Youtube, Facebook, Music2 } from "lucide-react";
+
+/** Compact white social icons for the header */
+function SocialLinks() {
+  const links = [
+    { href: "https://www.instagram.com/summit.wellness.oba", label: "Instagram", Icon: Instagram },
+    { href: "https://www.youtube.com/@SummitWellnessOBA",     label: "YouTube",   Icon: Youtube   },
+    { href: "https://www.tiktok.com/@summit.wellness.oba",    label: "TikTok",    Icon: Music2    }, // musical note icon
+    { href: "https://www.facebook.com/summitwellnessoba",     label: "Facebook",  Icon: Facebook  },
+  ];
+
+  return (
+    <div className="flex items-center gap-1">
+      {links.map(({ href, label, Icon }) => (
+        <a
+          key={label}
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={label}
+          className="p-2 rounded-full text-white/80 hover:text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/20"
+          title={label}
+        >
+          <Icon className="h-5 w-5" strokeWidth={2} />
+        </a>
+      ))}
+    </div>
+  );
+}
+
 
 /** Image rotator with fallback for the ‘supplements1.jpj’ slip */
 function FunctionalRotator() {
@@ -760,7 +812,81 @@ function ServicesDropdown() {
   );
 }
 
+function useLockBody(locked: boolean) {
+  React.useEffect(() => {
+    const prev = document.body.style.overflow;
+    if (locked) document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = prev; };
+  }, [locked]);
+}
+
+function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
+  useLockBody(open);
+
+  React.useEffect(() => {
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    if (open) window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open, onClose]);
+
+  if (!open) return null;
+
+  const linkCls = "block w-full text-left px-4 py-3 text-zinc-100 hover:bg-white/10 rounded-lg";
+  const closeAnd = (cb?: () => void) => () => { onClose(); cb?.(); };
+
+  return (
+    <div className="fixed inset-0 z-50 lg:hidden">
+      <button className="absolute inset-0 bg-black/50" aria-label="Close menu" onClick={onClose}/>
+      <div id="mobile-menu" className="absolute right-0 top-0 h-full w-[84%] max-w-sm bg-zinc-950 border-l border-zinc-800 shadow-2xl p-4 overflow-y-auto">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-zinc-300 text-sm tracking-widest">MENU</span>
+          <button onClick={onClose} className="p-2 rounded-md text-zinc-300 hover:bg-white/10" aria-label="Close">
+            <XIcon className="h-6 w-6" />
+          </button>
+        </div>
+
+        <nav className="space-y-1">
+          <a href="/" className={linkCls} onClick={closeAnd()}>Home</a>
+
+          <div className="mt-2 px-4 pt-3 pb-2 text-xs uppercase tracking-widest text-zinc-400">Services</div>
+          <a href="#iv"           className={linkCls} onClick={closeAnd()}>IV Therapy</a>
+          <a href="#injections"   className={linkCls} onClick={closeAnd()}>Injections</a>
+          <a href="#plunge"       className={linkCls} onClick={closeAnd()}>Cold Plunge</a>
+          <a href="#sauna"        className={linkCls} onClick={closeAnd()}>Infrared Sauna</a>
+          <a href="#hbot"         className={linkCls} onClick={closeAnd()}>Hyperbaric Chamber</a>
+          <a href="#compression"  className={linkCls} onClick={closeAnd()}>NormaTec Compression</a>
+          <a href="#functional"   className={linkCls} onClick={closeAnd()}>Functional Medicine & Testing</a>
+
+          <div className="mt-2 px-4 pt-3 pb-2 text-xs uppercase tracking-widest text-zinc-400">Company</div>
+          <a href="#reviews" className={linkCls} onClick={closeAnd()}>Reviews</a>
+          <a href="#contact" className={linkCls} onClick={closeAnd()}>Contact</a>
+          <a
+            href="https://blog.summitwellnessoba.com"
+            className={linkCls}
+            onClick={closeAnd()}
+            target="_blank"
+            rel="noopener noreferrer"
+          >Blog
+          </a>
+
+
+          <div className="mt-4 px-4">
+            <Button asChild className="w-full"><a href="#contact" onClick={closeAnd()}>Book Now</a></Button>
+          </div>
+
+          <div className="mt-3 px-2">
+            <SocialLinks className="justify-start" />
+          </div>
+        </nav>
+      </div>
+    </div>
+  );
+}
+
+
 export default function SummitWellnessSite() {
+  const [mobileOpen, setMobileOpen] = React.useState(false);
+
   useSmoothAnchors(80);
   return (
     <div className="min-h-screen bg-gradient-to-b from-black via-zinc-950 to-black text-zinc-200">
@@ -774,12 +900,46 @@ export default function SummitWellnessSite() {
             <a href="#packages" className="hover:text-white">Packages</a>
             <a href="#pricing" className="hover:text-white">Pricing</a>
             <a href="#contact" className="hover:text-white">Contact</a>
+            <a
+              href="https://blog.summitwellnessoba.com"
+              className="hover:text-white"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Blog
+            </a>
+
           </nav>
+
+          {/* Right side of header */}
           <div className="flex items-center gap-2">
-            <Button asChild className="hidden md:inline-flex"><a href="#contact">Book Now</a></Button>
+            {/* Mobile hamburger */}
+            <button
+              className="lg:hidden p-2 rounded-md text-white hover:bg-white/10"
+              onClick={() => setMobileOpen(true)}
+              aria-controls="mobile-menu"
+              aria-expanded={mobileOpen}
+              aria-label="Open menu"
+            >
+              <MenuIcon className="h-6 w-6" />
+            </button>
+
+            {/* Existing socials + Book Now */}
+            <div className="hidden lg:flex">
+              <SocialLinks />
+            </div>
+
+            <Button asChild className="ml-1">
+              <a href="#contact">Book Now</a>
+            </Button>
           </div>
+
+
         </div>
       </header>
+
+<MobileMenu open={mobileOpen} onClose={() => setMobileOpen(false)} />
+
 
       <section className={`${section} pt-12 md:pt-20 pb-12`}>
         <div className="grid lg:grid-cols-2 gap-10 items-center">
@@ -977,7 +1137,7 @@ export default function SummitWellnessSite() {
       </section>
 
       {testimonials.length > 0 && (
-        <section className={`${section} py-12 md:py-16`}>
+        <section id="reviews" className={`${section} py-12 md:py-16`}>
           <SectionHeader overline="Results" title="What Clients Say" />
           <div className="grid md:grid-cols-3 gap-6">
             {testimonials.map((quote, idx) => (
@@ -1001,6 +1161,7 @@ export default function SummitWellnessSite() {
           <div>
             <div className="flex items-center gap-2">
               <ImageWithFallback src={IMG.logo} fallbackLabel="Summit Wellness" alt="Summit Wellness" className="h-8 w-auto" />
+              <SocialLinks />
             </div>
             <p className="text-zinc-400 mt-3">Performance & recovery medicine on the Gulf Coast.</p>
           </div>
@@ -1016,7 +1177,7 @@ export default function SummitWellnessSite() {
           </div>
           <div>
             <div className="text-zinc-300 font-medium mb-3">Programs</div>
-            <ul className="space-y-2 text-zinc-4 00">
+            <ul className="space-y-2 text-zinc-400">
               <li>Memberships (Unlimited)</li>
               <li>Protocols & Packages</li>
               <li>Functional Medicine</li>
@@ -1031,7 +1192,9 @@ export default function SummitWellnessSite() {
               <li>info@summitwellnessoba.com</li>
               <li>3099 Loop Rd. Unit 4, Orange Beach, AL 36561</li>
             </ul>
-            <div className="text-xs text-zinc-500 mt-4">© {new Date().getFullYear()} Summit Wellness. All rights reserved.</div>
+            <div className="mt-8 flex items-center justify-between text-zinc-500 text-sm">
+              <p>© {new Date().getFullYear()} Summit Wellness. All rights reserved.</p>
+            </div>
           </div>
         </div>
       </footer>
