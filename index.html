@@ -26,5 +26,14 @@
   <body class="bg-black">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    
+    <!-- Netlify form registration (hidden) -->
+    <form name="contact" data-netlify="true" netlify-honeypot="bot-field" hidden>
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <input type="text" name="phone" />
+      <textarea name="message"></textarea>
+    </form>
+
   </body>
 </html>

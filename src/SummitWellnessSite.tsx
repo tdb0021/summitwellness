@@ -265,46 +265,115 @@ function FAQ() {
 }
 
 function ContactForm() {
+  const [status, setStatus] = React.useState<"idle" | "submitting" | "ok" | "error">("idle");
+  const [values, setValues] = React.useState({
+    name: "",
+    email: "",
+    phone: "",
+    message: "",
+  });
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+    setValues((v) => ({ ...v, [e.target.name]: e.target.value }));
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setStatus("submitting");
+    try {
+      const form = e.currentTarget;
+      const formData = new FormData(form);
+
+      // Netlify expects urlencoded body for SPA submissions
+      const body = new URLSearchParams(formData as any).toString();
+
+      const res = await fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body,
+      });
+
+      if (res.ok) {
+        setStatus("ok");
+        setValues({ name: "", email: "", phone: "", message: "" });
+      } else {
+        setStatus("error");
+      }
+    } catch {
+      setStatus("error");
+    }
+  }
+
+  if (status === "ok") {
+    return (
+      <Card className="bg-zinc-900/60 border-zinc-800">
+        <CardHeader>
+          <CardTitle className="text-zinc-100">Thanks — we’ve got it.</CardTitle>
+        </CardHeader>
+        <CardContent className="text-zinc-300">
+          We’ll get back to you quickly. If it’s urgent, call <strong>251-241-8260</strong>.
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <div className="grid lg:grid-cols-2 gap-8">
       <Card className="bg-zinc-900/60 border-zinc-800 order-2 lg:order-1">
         <CardHeader>
           <CardTitle className="text-zinc-100">Send us a message</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Input placeholder="Your name" />
-            <Input type="email" placeholder="Email" />
-          </div>
-          <Input placeholder="Phone (optional)" />
-          <Textarea placeholder="How can we help?" rows={6} />
-          <Button className="w-full">Submit</Button>
-        </CardContent>
+
+        {/* REAL FORM (Netlify-enabled) */}
+        <form
+          name="contact"
+          method="POST"
+          data-netlify="true"
+          netlify-honeypot="bot-field"
+          onSubmit={handleSubmit}
+        >
+          {/* Required for Netlify to associate submission */}
+          <input type="hidden" name="form-name" value="contact" />
+          {/* Honeypot (hidden from users) */}
+          <p className="hidden">
+            <label>Don’t fill this out: <input name="bot-field" /></label>
+          </p>
+
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Input name="name" placeholder="Your name" value={values.name} onChange={onChange} required />
+              <Input name="email" type="email" placeholder="Email" value={values.email} onChange={onChange} required />
+            </div>
+            <Input name="phone" placeholder="Phone (optional)" value={values.phone} onChange={onChange} />
+            <Textarea name="message" placeholder="How can we help?" rows={6} value={values.message} onChange={onChange} required />
+
+            <Button className="w-full" type="submit" disabled={status === "submitting"}>
+              {status === "submitting" ? "Sending..." : "Submit"}
+            </Button>
+
+            {status === "error" && (
+              <p className="text-red-400 text-sm">Something went wrong. Please try again or call 251-241-8260.</p>
+            )}
+          </CardContent>
+        </form>
       </Card>
+
+      {/* Sidebar card (address/hours) — keep your existing content here */}
       <div className="order-1 lg:order-2 space-y-6">
         <Card className="bg-zinc-900/60 border-zinc-800">
           <CardHeader className="pb-2">
             <CardTitle className="text-zinc-100">Visit Summit Wellness</CardTitle>
           </CardHeader>
           <CardContent className="text-zinc-300 space-y-3">
-            <div className="flex items-center gap-2">
-              <MapPin className="h-5 w-5" />
-              <span>3099 Loop Rd. Unit 4, Orange Beach, AL 36561</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Clock className="h-5 w-5" />
-              <span>Mon–Fri 8a–4p • Sat 8a–12p</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <PhoneCall className="h-5 w-5" />
-              <span>251-241-8260</span>
-            </div>
+            <div className="flex items-center gap-2"><MapPin className="h-5 w-5" /><span>3099 Loop Rd. Unit 4, Orange Beach, AL 36561</span></div>
+            <div className="flex items-center gap-2"><Clock className="h-5 w-5" /><span>Mon–Fri 8a–4p • Sat 8a–12p</span></div>
+            <div className="flex items-center gap-2"><PhoneCall className="h-5 w-5" /><span>251-241-8260</span></div>
           </CardContent>
         </Card>
       </div>
     </div>
   );
 }
+
 
 /** Hover-to-play video with image poster fallback */
 function HoverVideoPoster({
