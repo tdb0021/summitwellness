@@ -858,10 +858,18 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
           <a href="#functional"   className={linkCls} onClick={closeAnd()}>Functional Medicine & Testing</a>
 
           <div className="mt-2 px-4 pt-3 pb-2 text-xs uppercase tracking-widest text-zinc-400">Company</div>
-          <a href="#team"     className={linkCls} onClick={closeAnd()}>Team</a>
-          <a href="#reviews"  className={linkCls} onClick={closeAnd()}>Reviews</a>
-          <a href="#contact"  className={linkCls} onClick={closeAnd()}>Contact</a>
-          <a href="/blog"     className={linkCls} onClick={closeAnd()}>Blog</a>
+          <a href="#team" className={linkCls} onClick={closeAnd()}>Team</a>
+          <a href="#reviews" className={linkCls} onClick={closeAnd()}>Reviews</a>
+          <a href="#contact" className={linkCls} onClick={closeAnd()}>Contact</a>
+          <a
+            href="https://blog.summitwellnessoba.com"
+            className={linkCls}
+            onClick={closeAnd()}
+            target="_blank"
+            rel="noopener noreferrer"
+          >Blog
+          </a>
+
 
           <div className="mt-4 px-4">
             <Button asChild className="w-full"><a href="#contact" onClick={closeAnd()}>Book Now</a></Button>
@@ -894,12 +902,7 @@ export default function SummitWellnessSite() {
             <a href="#pricing" className="hover:text-white">Pricing</a>
             <a href="#contact" className="hover:text-white">Contact</a>
           </nav>
-          <div className="flex items-center gap-2">
           
-            <Button asChild className="ml-1">
-              <a href="#contact">Book Now</a>
-            </Button>
-          </div>
           {/* Right side of header */}
           <div className="flex items-center gap-2">
             {/* Mobile hamburger */}
