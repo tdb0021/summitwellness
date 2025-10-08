@@ -895,7 +895,7 @@ export default function SummitWellnessSite() {
             <a href="#contact" className="hover:text-white">Contact</a>
           </nav>
           <div className="flex items-center gap-2">
-            <SocialLinks />
+          
             <Button asChild className="ml-1">
               <a href="#contact">Book Now</a>
             </Button>
