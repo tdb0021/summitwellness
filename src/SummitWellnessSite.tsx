@@ -411,7 +411,6 @@ function HoverVideoPoster({
   );
 }
 
-
 function ServiceBlock({
   id,
   title,
@@ -439,37 +438,38 @@ function ServiceBlock({
 }) {
   return (
     <section id={id} className={`${section} py-12 md:py-16`}>
-      <div className={`grid lg:grid-cols-2 gap-10 items-center ${reverse ? "lg:[&>*:first-child]:order-2" : ""}`}>
+      <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
+        {/* MEDIA COLUMN */}
+        <div className={`min-w-0 ${reverse ? "lg:order-2" : ""}`}>
+          <div
+            className="relative w-full max-w-full rounded-2xl overflow-hidden border border-zinc-800 shadow-2xl z-0"
+            style={{ aspectRatio: "16 / 9", minHeight: 360 }}
+          >
+            {videoSrc ? (
+              <HoverVideoPoster
+                poster={imageSrc}
+                videoSrc={videoSrc}
+                alt={imageAlt}
+                fallbackLabel={title}
+                className="absolute inset-0"
+              />
+            ) : (
+              <ImageWithFallback
+                src={imageSrc}
+                alt={imageAlt}
+                fallbackLabel={title}
+                className="block h-full w-full object-cover"
+              />
+            )}
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-black/10" />
+          </div>
+        </div>
 
-        {/* MEDIA */}
-        <div
-       className="rounded-2xl overflow-hidden border border-zinc-800 shadow-2xl relative"
-       style={{ aspectRatio: "16 / 9", minHeight: 360 }}
-        >
-      {videoSrc ? (
-        <HoverVideoPoster
-           poster={imageSrc}
-            videoSrc={videoSrc}
-           alt={imageAlt}
-          fallbackLabel={title}
-           className="absolute inset-0"
-       />
-  ) : (
-    // Non-video path still shows the poster as a normal img
-    <ImageWithFallback
-      src={imageSrc}
-      alt={imageAlt}
-      fallbackLabel={title}
-      className="block h-full w-full object-cover"
-      loading="eager"
-    />
-  )}
-</div>
-
-
-        {/* COPY */}
-        <div>
-          <h3 className="text-2xl md:text-3xl font-semibold text-white">{title}</h3>
+        {/* TEXT COLUMN */}
+        <div className={`min-w-0 ${reverse ? "lg:order-1" : ""}`}>
+          <h3 className="text-2xl md:text-3xl font-semibold text-white break-words">
+            {title}
+          </h3>
           <p className={`${p} mt-3`}>{desc}</p>
           <ul className="mt-5 space-y-2 text-zinc-300">
             {bullets.map((b) => (
@@ -478,7 +478,11 @@ function ServiceBlock({
               </li>
             ))}
           </ul>
-          {typeof extra === "string" ? <p className="text-zinc-300 mt-4">{extra}</p> : extra}
+          {typeof extra === "string" ? (
+            <p className="text-zinc-300 mt-4">{extra}</p>
+          ) : (
+            extra
+          )}
           <div className="mt-6 flex flex-wrap gap-3">
             {primaryCta && (
               <Button asChild>
@@ -486,13 +490,16 @@ function ServiceBlock({
               </Button>
             )}
             {secondaryCta && (
-              <Button asChild variant="outline" className="border-zinc-700 text-zinc-200 hover:bg-zinc-900">
+              <Button
+                asChild
+                variant="outline"
+                className="border-zinc-700 text-zinc-200 hover:bg-zinc-900"
+              >
                 <a href="#contact">{secondaryCta}</a>
               </Button>
             )}
           </div>
         </div>
-
       </div>
     </section>
   );
