@@ -309,11 +309,13 @@ function HoverVideoPoster({
   videoSrc,
   alt,
   className,
+  fallbackLabel = "Media",
 }: {
   poster: string;
   videoSrc: string;
   alt: string;
   className?: string;
+  fallbackLabel?: string;
 }) {
   const [playing, setPlaying] = React.useState(false);
   const [canPlay, setCanPlay] = React.useState(false);
@@ -365,10 +367,17 @@ function HoverVideoPoster({
       onMouseLeave={stop}
       onTouchStart={toggleTouch}
     >
-      <img src={poster} alt={alt} className="absolute inset-0 h-full w-full object-cover" loading="lazy" />
+      {/* Poster with safe fallback */}
+      <ImageWithFallback
+        src={poster}
+        alt={alt}
+        fallbackLabel={fallbackLabel}
+        className="absolute inset-0 h-full w-full object-cover z-[1]"
+      />
+
       <video
         ref={videoRef}
-        className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-300 ${
+        className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-300 z-[2] ${
           playing && canPlay && !reduced ? "opacity-100" : "opacity-0"
         }`}
         muted
@@ -377,15 +386,27 @@ function HoverVideoPoster({
         loop
         poster={poster}
         onCanPlay={() => setCanPlay(true)}
+        onError={() => {
+          setCanPlay(false);
+          setPlaying(false);
+          if (videoRef.current) {
+            videoRef.current.pause();
+            videoRef.current.currentTime = 0;
+          }
+          console.warn("Video failed to load:", videoSrc);
+        }}
         tabIndex={-1}
         aria-label={alt}
       >
         <source src={videoSrc} type="video/mp4" />
       </video>
-      <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/20 via-transparent to-black/10" />
+
+      {/* Optional gradient on top */}
+      <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/20 via-transparent to-black/10 z-[3]" />
     </div>
   );
 }
+
 
 function ServiceBlock({
   id,
@@ -415,13 +436,26 @@ function ServiceBlock({
   return (
     <section id={id} className={`${section} py-12 md:py-16`}>
       <div className={`grid lg:grid-cols-2 gap-10 items-center ${reverse ? "lg:[&>*:first-child]:order-2" : ""}`}>
-        <div className="relative aspect-[16/9] rounded-2xl overflow-hidden border border-zinc-800 shadow-2xl">
-          {videoSrc ? (
-            <HoverVideoPoster poster={imageSrc} videoSrc={videoSrc} alt={imageAlt} className="absolute inset-0" />
-          ) : (
-            <ImageWithFallback src={imageSrc} alt={imageAlt} fallbackLabel={title} className="absolute inset-0 h-full w-full object-cover" />
-          )}
-        </div>
+        <div className="relative rounded-2xl overflow-hidden border border-zinc-800 shadow-2xl
+                h-64 sm:h-72 md:h-80 lg:h-[420px] [aspect-ratio:16/9]">
+  {videoSrc ? (
+    <HoverVideoPoster
+      poster={imageSrc}
+      videoSrc={videoSrc}
+      alt={imageAlt}
+      fallbackLabel={title}
+      className="absolute inset-0"
+    />
+  ) : (
+    <ImageWithFallback
+      src={imageSrc}
+      alt={imageAlt}
+      fallbackLabel={title}
+      className="absolute inset-0 h-full w-full object-cover z-[1]"
+    />
+  )}
+</div>
+
 
         <div>
           <h3 className="text-2xl md:text-3xl font-semibold text-white">{title}</h3>
