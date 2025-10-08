@@ -1036,6 +1036,7 @@ export default function SummitWellnessSite() {
           <div>
             <div className="flex items-center gap-2">
               <ImageWithFallback src={IMG.logo} fallbackLabel="Summit Wellness" alt="Summit Wellness" className="h-8 w-auto" />
+              <SocialLinks />
             </div>
             <p className="text-zinc-400 mt-3">Performance & recovery medicine on the Gulf Coast.</p>
           </div>
@@ -1068,7 +1069,6 @@ export default function SummitWellnessSite() {
             </ul>
             <div className="mt-8 flex items-center justify-between text-zinc-500 text-sm">
               <p>© {new Date().getFullYear()} Summit Wellness. All rights reserved.</p>
-              <SocialLinks />
             </div>
           </div>
         </div>
