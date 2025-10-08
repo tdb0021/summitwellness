@@ -917,7 +917,7 @@ export default function SummitWellnessSite() {
             </button>
 
             {/* Existing socials + Book Now */}
-            <SocialLinks className="hidden sm:flex" />
+            <SocialLinks className="hidden lg:flex" />
             <Button asChild className="ml-1">
               <a href="#contact">Book Now</a>
             </Button>
