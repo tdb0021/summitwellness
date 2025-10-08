@@ -858,7 +858,6 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
           <a href="#functional"   className={linkCls} onClick={closeAnd()}>Functional Medicine & Testing</a>
 
           <div className="mt-2 px-4 pt-3 pb-2 text-xs uppercase tracking-widest text-zinc-400">Company</div>
-          <a href="#team" className={linkCls} onClick={closeAnd()}>Team</a>
           <a href="#reviews" className={linkCls} onClick={closeAnd()}>Reviews</a>
           <a href="#contact" className={linkCls} onClick={closeAnd()}>Contact</a>
           <a
@@ -917,7 +916,10 @@ export default function SummitWellnessSite() {
             </button>
 
             {/* Existing socials + Book Now */}
-            <SocialLinks className="hidden lg:flex" />
+            <div className="hidden lg:flex">
+              <SocialLinks />
+            </div>
+
             <Button asChild className="ml-1">
               <a href="#contact">Book Now</a>
             </Button>
@@ -1126,7 +1128,7 @@ export default function SummitWellnessSite() {
       </section>
 
       {testimonials.length > 0 && (
-        <section className={`${section} py-12 md:py-16`}>
+        <section id="reviews" className={`${section} py-12 md:py-16`}>
           <SectionHeader overline="Results" title="What Clients Say" />
           <div className="grid md:grid-cols-3 gap-6">
             {testimonials.map((quote, idx) => (
