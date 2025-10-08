@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Menu as MenuIcon, X as XIcon } from "lucide-react";
 import {
   Check,
   Droplet,
@@ -811,7 +812,74 @@ function ServicesDropdown() {
   );
 }
 
+function useLockBody(locked: boolean) {
+  React.useEffect(() => {
+    const prev = document.body.style.overflow;
+    if (locked) document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = prev; };
+  }, [locked]);
+}
+
+function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
+  useLockBody(open);
+
+  React.useEffect(() => {
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    if (open) window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open, onClose]);
+
+  if (!open) return null;
+
+  const linkCls = "block w-full text-left px-4 py-3 text-zinc-100 hover:bg-white/10 rounded-lg";
+  const closeAnd = (cb?: () => void) => () => { onClose(); cb?.(); };
+
+  return (
+    <div className="fixed inset-0 z-50 lg:hidden">
+      <button className="absolute inset-0 bg-black/50" aria-label="Close menu" onClick={onClose}/>
+      <div id="mobile-menu" className="absolute right-0 top-0 h-full w-[84%] max-w-sm bg-zinc-950 border-l border-zinc-800 shadow-2xl p-4 overflow-y-auto">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-zinc-300 text-sm tracking-widest">MENU</span>
+          <button onClick={onClose} className="p-2 rounded-md text-zinc-300 hover:bg-white/10" aria-label="Close">
+            <XIcon className="h-6 w-6" />
+          </button>
+        </div>
+
+        <nav className="space-y-1">
+          <a href="/" className={linkCls} onClick={closeAnd()}>Home</a>
+
+          <div className="mt-2 px-4 pt-3 pb-2 text-xs uppercase tracking-widest text-zinc-400">Services</div>
+          <a href="#iv"           className={linkCls} onClick={closeAnd()}>IV Therapy</a>
+          <a href="#injections"   className={linkCls} onClick={closeAnd()}>Injections</a>
+          <a href="#plunge"       className={linkCls} onClick={closeAnd()}>Cold Plunge</a>
+          <a href="#sauna"        className={linkCls} onClick={closeAnd()}>Infrared Sauna</a>
+          <a href="#hbot"         className={linkCls} onClick={closeAnd()}>Hyperbaric Chamber</a>
+          <a href="#compression"  className={linkCls} onClick={closeAnd()}>NormaTec Compression</a>
+          <a href="#functional"   className={linkCls} onClick={closeAnd()}>Functional Medicine & Testing</a>
+
+          <div className="mt-2 px-4 pt-3 pb-2 text-xs uppercase tracking-widest text-zinc-400">Company</div>
+          <a href="#team"     className={linkCls} onClick={closeAnd()}>Team</a>
+          <a href="#reviews"  className={linkCls} onClick={closeAnd()}>Reviews</a>
+          <a href="#contact"  className={linkCls} onClick={closeAnd()}>Contact</a>
+          <a href="/blog"     className={linkCls} onClick={closeAnd()}>Blog</a>
+
+          <div className="mt-4 px-4">
+            <Button asChild className="w-full"><a href="#contact" onClick={closeAnd()}>Book Now</a></Button>
+          </div>
+
+          <div className="mt-3 px-2">
+            <SocialLinks className="justify-start" />
+          </div>
+        </nav>
+      </div>
+    </div>
+  );
+}
+
+
 export default function SummitWellnessSite() {
+  const [mobileOpen, setMobileOpen] = React.useState(false);
+
   useSmoothAnchors(80);
   return (
     <div className="min-h-screen bg-gradient-to-b from-black via-zinc-950 to-black text-zinc-200">
@@ -832,9 +900,32 @@ export default function SummitWellnessSite() {
               <a href="#contact">Book Now</a>
             </Button>
           </div>
+          {/* Right side of header */}
+          <div className="flex items-center gap-2">
+            {/* Mobile hamburger */}
+            <button
+              className="lg:hidden p-2 rounded-md text-white hover:bg-white/10"
+              onClick={() => setMobileOpen(true)}
+              aria-controls="mobile-menu"
+              aria-expanded={mobileOpen}
+              aria-label="Open menu"
+            >
+              <MenuIcon className="h-6 w-6" />
+            </button>
+
+            {/* Existing socials + Book Now */}
+            <SocialLinks className="hidden sm:flex" />
+            <Button asChild className="ml-1">
+              <a href="#contact">Book Now</a>
+            </Button>
+          </div>
+
 
         </div>
       </header>
+
+<MobileMenu open={mobileOpen} onClose={() => setMobileOpen(false)} />
+
 
       <section className={`${section} pt-12 md:pt-20 pb-12`}>
         <div className="grid lg:grid-cols-2 gap-10 items-center">
