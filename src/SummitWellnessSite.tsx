@@ -318,32 +318,31 @@ function HoverVideoPoster({
   fallbackLabel?: string;
 }) {
   const [playing, setPlaying] = React.useState(false);
-  const [canPlay, setCanPlay] = React.useState(false);
+  const [ready, setReady] = React.useState(false); // video can render
   const [reduced, setReduced] = React.useState(false);
   const containerRef = React.useRef<HTMLDivElement>(null);
   const videoRef = React.useRef<HTMLVideoElement>(null);
 
+  // Respect reduced motion
   React.useEffect(() => {
     const mq = window.matchMedia?.("(prefers-reduced-motion: reduce)");
-    const set = () => setReduced(!!mq?.matches);
-    set();
-    mq?.addEventListener?.("change", set);
-    return () => mq?.removeEventListener?.("change", set);
+    const apply = () => setReduced(!!mq?.matches);
+    apply(); mq?.addEventListener?.("change", apply);
+    return () => mq?.removeEventListener?.("change", apply);
   }, []);
 
+  // Pause/reset when off-screen
   React.useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
-    const io = new IntersectionObserver((entries) => {
-      const visible = entries[0]?.isIntersecting;
-      if (!visible && videoRef.current) {
+    const io = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting && videoRef.current) {
         videoRef.current.pause();
         videoRef.current.currentTime = 0;
         setPlaying(false);
       }
-    }, { threshold: 0.3 });
-    io.observe(el);
-    return () => io.disconnect();
+    }, { threshold: 0.25 });
+    io.observe(el); return () => io.disconnect();
   }, []);
 
   const start = () => {
@@ -357,6 +356,7 @@ function HoverVideoPoster({
     videoRef.current.currentTime = 0;
     setPlaying(false);
   };
+
   const toggleTouch = () => (playing ? stop() : start());
 
   return (
@@ -367,7 +367,7 @@ function HoverVideoPoster({
       onMouseLeave={stop}
       onTouchStart={toggleTouch}
     >
-      {/* Poster with safe fallback */}
+      {/* Always-visible poster (with fallback) */}
       <ImageWithFallback
         src={poster}
         alt={alt}
@@ -375,24 +375,22 @@ function HoverVideoPoster({
         className="absolute inset-0 h-full w-full object-cover z-[1]"
       />
 
+      {/* Video fades on top; no black frame because poster sits underneath */}
       <video
         ref={videoRef}
         className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-300 z-[2] ${
-          playing && canPlay && !reduced ? "opacity-100" : "opacity-0"
+          playing && ready && !reduced ? "opacity-100" : "opacity-0"
         }`}
         muted
         playsInline
         preload="metadata"
         loop
         poster={poster}
-        onCanPlay={() => setCanPlay(true)}
+        onCanPlay={() => setReady(true)}
+        onLoadedData={() => setReady(true)}
         onError={() => {
-          setCanPlay(false);
+          setReady(false);
           setPlaying(false);
-          if (videoRef.current) {
-            videoRef.current.pause();
-            videoRef.current.currentTime = 0;
-          }
           console.warn("Video failed to load:", videoSrc);
         }}
         tabIndex={-1}
@@ -401,11 +399,12 @@ function HoverVideoPoster({
         <source src={videoSrc} type="video/mp4" />
       </video>
 
-      {/* Optional gradient on top */}
+      {/* Subtle overlay for readability */}
       <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/20 via-transparent to-black/10 z-[3]" />
     </div>
   );
 }
+
 
 
 function ServiceBlock({
@@ -437,7 +436,7 @@ function ServiceBlock({
     <section id={id} className={`${section} py-12 md:py-16`}>
       <div className={`grid lg:grid-cols-2 gap-10 items-center ${reverse ? "lg:[&>*:first-child]:order-2" : ""}`}>
         <div className="relative rounded-2xl overflow-hidden border border-zinc-800 shadow-2xl
-                h-64 sm:h-72 md:h-80 lg:h-[420px] [aspect-ratio:16/9]">
+             min-h-[260px] sm:min-h-[320px] md:min-h-[380px] lg:min-h-[420px] [aspect-ratio:16/9]"
   {videoSrc ? (
     <HoverVideoPoster
       poster={imageSrc}
