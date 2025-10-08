@@ -265,57 +265,6 @@ function FAQ() {
 }
 
 function ContactForm() {
-  const [status, setStatus] = React.useState<"idle" | "submitting" | "ok" | "error">("idle");
-  const [values, setValues] = React.useState({
-    name: "",
-    email: "",
-    phone: "",
-    message: "",
-  });
-
-  const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-    setValues((v) => ({ ...v, [e.target.name]: e.target.value }));
-
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setStatus("submitting");
-    try {
-      const form = e.currentTarget;
-      const formData = new FormData(form);
-
-      // Netlify expects urlencoded body for SPA submissions
-      const body = new URLSearchParams(formData as any).toString();
-
-      const res = await fetch("/", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body,
-      });
-
-      if (res.ok) {
-        setStatus("ok");
-        setValues({ name: "", email: "", phone: "", message: "" });
-      } else {
-        setStatus("error");
-      }
-    } catch {
-      setStatus("error");
-    }
-  }
-
-  if (status === "ok") {
-    return (
-      <Card className="bg-zinc-900/60 border-zinc-800">
-        <CardHeader>
-          <CardTitle className="text-zinc-100">Thanks — we’ve got it.</CardTitle>
-        </CardHeader>
-        <CardContent className="text-zinc-300">
-          We’ll get back to you quickly. If it’s urgent, call <strong>251-241-8260</strong>.
-        </CardContent>
-      </Card>
-    );
-  }
-
   return (
     <div className="grid lg:grid-cols-2 gap-8">
       <Card className="bg-zinc-900/60 border-zinc-800 order-2 lg:order-1">
@@ -323,41 +272,31 @@ function ContactForm() {
           <CardTitle className="text-zinc-100">Send us a message</CardTitle>
         </CardHeader>
 
-        {/* REAL FORM (Netlify-enabled) */}
+        {/* Native POST to Netlify with thank-you redirect */}
         <form
           name="contact"
           method="POST"
+          action="/thank-you"
           data-netlify="true"
           netlify-honeypot="bot-field"
-          onSubmit={handleSubmit}
+          className="contents"
         >
-          {/* Required for Netlify to associate submission */}
           <input type="hidden" name="form-name" value="contact" />
-          {/* Honeypot (hidden from users) */}
-          <p className="hidden">
-            <label>Don’t fill this out: <input name="bot-field" /></label>
-          </p>
+          <p className="hidden"><label>Don’t fill this out: <input name="bot-field" /></label></p>
 
           <CardContent className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Input name="name" placeholder="Your name" value={values.name} onChange={onChange} required />
-              <Input name="email" type="email" placeholder="Email" value={values.email} onChange={onChange} required />
+              <Input name="name" placeholder="Your name" required />
+              <Input name="email" type="email" placeholder="Email" required />
             </div>
-            <Input name="phone" placeholder="Phone (optional)" value={values.phone} onChange={onChange} />
-            <Textarea name="message" placeholder="How can we help?" rows={6} value={values.message} onChange={onChange} required />
+            <Input name="phone" placeholder="Phone (optional)" />
+            <Textarea name="message" placeholder="How can we help?" rows={6} required />
 
-            <Button className="w-full" type="submit" disabled={status === "submitting"}>
-              {status === "submitting" ? "Sending..." : "Submit"}
-            </Button>
-
-            {status === "error" && (
-              <p className="text-red-400 text-sm">Something went wrong. Please try again or call 251-241-8260.</p>
-            )}
+            <Button className="w-full" type="submit">Submit</Button>
           </CardContent>
         </form>
       </Card>
 
-      {/* Sidebar card (address/hours) — keep your existing content here */}
       <div className="order-1 lg:order-2 space-y-6">
         <Card className="bg-zinc-900/60 border-zinc-800">
           <CardHeader className="pb-2">
@@ -373,7 +312,6 @@ function ContactForm() {
     </div>
   );
 }
-
 
 /** Hover-to-play video with image poster fallback */
 function HoverVideoPoster({
