@@ -1051,7 +1051,7 @@ export default function SummitWellnessSite() {
           </div>
           <div>
             <div className="text-zinc-300 font-medium mb-3">Programs</div>
-            <ul className="space-y-2 text-zinc-4 00">
+            <ul className="space-y-2 text-zinc-400">
               <li>Memberships (Unlimited)</li>
               <li>Protocols & Packages</li>
               <li>Functional Medicine</li>
@@ -1066,7 +1066,10 @@ export default function SummitWellnessSite() {
               <li>info@summitwellnessoba.com</li>
               <li>3099 Loop Rd. Unit 4, Orange Beach, AL 36561</li>
             </ul>
-            <div className="text-xs text-zinc-500 mt-4">© {new Date().getFullYear()} Summit Wellness. All rights reserved.</div>
+            <div className="mt-8 flex items-center justify-between text-zinc-500 text-sm">
+              <p>© {new Date().getFullYear()} Summit Wellness. All rights reserved.</p>
+              <SocialLinks />
+            </div>
           </div>
         </div>
       </footer>
