@@ -478,14 +478,17 @@ function HoverVideoPoster({
         ref={videoRef}
         className={`absolute transition-opacity duration-300 ${playing && ready && !reduced ? "opacity-100" : "opacity-0"
           }`}
-        // Overscan by 1px to kill sub-pixel gaps on mobile
+        // Overscan + slight scale to kill seams on *any* edge
         style={{
-          inset: -1, // -1px on all sides
+          // start bigger than the container
+          top: -1, left: -1,
           width: "calc(100% + 2px)",
           height: "calc(100% + 2px)",
           objectFit: "cover",
-          WebkitTransform: "translateZ(0)", // mobile/safari: avoid pixel snapping
-          transform: "translateZ(0)",
+          // eliminate right-edge hairline on iOS/Android by scaling ~1%
+          transform: "translateZ(0) scale(1.01)",
+          WebkitTransform: "translateZ(0) scale(1.01)",
+          transformOrigin: "center center",
           willChange: "opacity, transform",
         }}
         muted
@@ -501,6 +504,7 @@ function HoverVideoPoster({
       >
         <source src={videoSrc} type="video/mp4" />
       </video>
+
 
 
       {/* Subtle overlay */}
