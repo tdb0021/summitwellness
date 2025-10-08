@@ -265,6 +265,50 @@ function FAQ() {
 }
 
 function ContactForm() {
+  const [status, setStatus] = React.useState<"idle" | "sending" | "ok" | "error">("idle");
+  const [values, setValues] = React.useState({ name: "", email: "", phone: "", message: "" });
+  const [msg, setMsg] = React.useState<string | null>(null);
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+    setValues((v) => ({ ...v, [e.target.name]: e.target.value }));
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setStatus("sending");
+    setMsg(null);
+
+    try {
+      const form = e.currentTarget;
+      const data = new FormData(form);
+
+      // Ensure Netlify knows which form this is
+      if (!data.get("form-name")) data.set("form-name", "contact");
+
+      // Netlify expects URL-encoded body for SPA submissions
+      const body = new URLSearchParams(data as any).toString();
+
+      const res = await fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body,
+      });
+
+      if (res.ok) {
+        setStatus("ok");
+        setMsg("We’ve received your request.");
+        setValues({ name: "", email: "", phone: "", message: "" });
+      } else {
+        console.warn("Netlify POST failed:", res.status, res.statusText);
+        setStatus("error");
+        setMsg("Something went wrong. Please try again or call 251-241-8260.");
+      }
+    } catch (err) {
+      console.error("Submit error:", err);
+      setStatus("error");
+      setMsg("Something went wrong. Please try again or call 251-241-8260.");
+    }
+  }
+
   return (
     <div className="grid lg:grid-cols-2 gap-8">
       <Card className="bg-zinc-900/60 border-zinc-800 order-2 lg:order-1">
@@ -272,31 +316,54 @@ function ContactForm() {
           <CardTitle className="text-zinc-100">Send us a message</CardTitle>
         </CardHeader>
 
-        {/* Native POST to Netlify with thank-you redirect */}
+        {/* Netlify-enabled form with inline confirmation */}
         <form
           name="contact"
           method="POST"
-          action="/thank-you"
           data-netlify="true"
           netlify-honeypot="bot-field"
-          className="contents"
+          onSubmit={handleSubmit}
         >
+          {/* Required hidden input so Netlify associates the submission */}
           <input type="hidden" name="form-name" value="contact" />
-          <p className="hidden"><label>Don’t fill this out: <input name="bot-field" /></label></p>
+
+          {/* Honeypot field to reduce spam (hidden from users) */}
+          <p className="hidden">
+            <label>Don’t fill this out: <input name="bot-field" /></label>
+          </p>
 
           <CardContent className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Input name="name" placeholder="Your name" required />
-              <Input name="email" type="email" placeholder="Email" required />
+              <Input name="name" placeholder="Your name" value={values.name} onChange={onChange} required />
+              <Input name="email" type="email" placeholder="Email" value={values.email} onChange={onChange} required />
             </div>
-            <Input name="phone" placeholder="Phone (optional)" />
-            <Textarea name="message" placeholder="How can we help?" rows={6} required />
+            <Input name="phone" placeholder="Phone (optional)" value={values.phone} onChange={onChange} />
+            <Textarea
+              name="message"
+              placeholder="How can we help?"
+              rows={6}
+              value={values.message}
+              onChange={onChange}
+              required
+            />
 
-            <Button className="w-full" type="submit">Submit</Button>
+            <Button className="w-full" type="submit" disabled={status === "sending"}>
+              {status === "sending" ? "Sending..." : "Submit"}
+            </Button>
+
+            {/* Inline confirmation / error message at the bottom of the form */}
+            <div className="min-h-[24px]" aria-live="polite">
+              {msg && (
+                <p className={status === "ok" ? "text-emerald-400 text-sm mt-2" : "text-red-400 text-sm mt-2"}>
+                  {msg}
+                </p>
+              )}
+            </div>
           </CardContent>
         </form>
       </Card>
 
+      {/* Keep your address/hours card on the right */}
       <div className="order-1 lg:order-2 space-y-6">
         <Card className="bg-zinc-900/60 border-zinc-800">
           <CardHeader className="pb-2">
@@ -312,6 +379,7 @@ function ContactForm() {
     </div>
   );
 }
+
 
 /** Hover-to-play video with image poster fallback */
 function HoverVideoPoster({
