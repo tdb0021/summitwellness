@@ -55,11 +55,13 @@ function ImageWithFallback({
   alt,
   className,
   fallbackLabel,
+  loading = "lazy",
 }: {
   src: string;
   alt: string;
   className?: string;
   fallbackLabel: string;
+  loading?: "eager" | "lazy";
 }) {
   const [current, setCurrent] = React.useState(src);
   return (
@@ -67,11 +69,12 @@ function ImageWithFallback({
       src={current}
       alt={alt}
       className={className}
-      loading="lazy"
+      loading={loading}
       onError={() => setCurrent(fallbackSVG(fallbackLabel))}
     />
   );
 }
+
 
 function ImageMulti({
   srcs,
@@ -434,11 +437,13 @@ function ServiceBlock({
 }) {
   return (
     <section id={id} className={`${section} py-12 md:py-16`}>
-      <div className={`grid lg:grid-cols-2 gap-10 items-center ${reverse ? "lg:[&>*:first-child]:order-2" : ""}`}>
-        <div className="relative rounded-2xl overflow-hidden border border-zinc-800 shadow-2xl
-             min-h-[260px] sm:min-h-[320px] md:min-h-[380px] lg:min-h-[420px] [aspect-ratio:16/9]"
+      <div
+  className="rounded-2xl overflow-hidden border border-zinc-800 shadow-2xl relative"
+  // Inline style = no Tailwind dependency; guarantees height even if JIT misses classes
+  style={{ aspectRatio: "16 / 9", minHeight: 360 }}
 >
   {videoSrc ? (
+    // Poster sits underneath; video fades in above it
     <HoverVideoPoster
       poster={imageSrc}
       videoSrc={videoSrc}
@@ -447,41 +452,19 @@ function ServiceBlock({
       className="absolute inset-0"
     />
   ) : (
+    // IMPORTANT: not absolute; fills container and paints immediately
     <ImageWithFallback
       src={imageSrc}
       alt={imageAlt}
       fallbackLabel={title}
-      className="absolute inset-0 h-full w-full object-cover z-[1]"
+      loading="eager"
+      className="block h-full w-full object-cover"
     />
   )}
+  {/* Optional gradient overlay */}
+  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-black/10" />
 </div>
 
-
-        <div>
-          <h3 className="text-2xl md:text-3xl font-semibold text-white">{title}</h3>
-          <p className={`${p} mt-3`}>{desc}</p>
-          <ul className="mt-5 space-y-2 text-zinc-300">
-            {bullets.map((b) => (
-              <li key={b} className="flex items-start gap-2">
-                <Check className="h-5 w-5 shrink-0" /> <span>{b}</span>
-              </li>
-            ))}
-          </ul>
-          {typeof extra === "string" ? <p className="text-zinc-300 mt-4">{extra}</p> : extra}
-          <div className="mt-6 flex flex-wrap gap-3">
-            {primaryCta && (
-              <Button asChild>
-                <a href="#contact">{primaryCta}</a>
-              </Button>
-            )}
-            {secondaryCta && (
-              <Button asChild variant="outline" className="border-zinc-700 text-zinc-200 hover:bg-zinc-900">
-                <a href="#contact">{secondaryCta}</a>
-              </Button>
-            )}
-          </div>
-        </div>
-      </div>
     </section>
   );
 }
