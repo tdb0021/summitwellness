@@ -321,9 +321,9 @@ function HoverVideoPoster({
   fallbackLabel?: string;
 }) {
   const [playing, setPlaying] = React.useState(false);
-  const [ready, setReady] = React.useState(false); // video can render
+  const [ready, setReady] = React.useState(false);
   const [reduced, setReduced] = React.useState(false);
-  const containerRef = React.useRef<HTMLDivElement>(null);
+  const ref = React.useRef<HTMLDivElement>(null);
   const videoRef = React.useRef<HTMLVideoElement>(null);
 
   // Respect reduced motion
@@ -336,7 +336,7 @@ function HoverVideoPoster({
 
   // Pause/reset when off-screen
   React.useEffect(() => {
-    const el = containerRef.current;
+    const el = ref.current;
     if (!el) return;
     const io = new IntersectionObserver(([entry]) => {
       if (!entry.isIntersecting && videoRef.current) {
@@ -345,7 +345,8 @@ function HoverVideoPoster({
         setPlaying(false);
       }
     }, { threshold: 0.25 });
-    io.observe(el); return () => io.disconnect();
+    io.observe(el);
+    return () => io.disconnect();
   }, []);
 
   const start = () => {
@@ -359,54 +360,57 @@ function HoverVideoPoster({
     videoRef.current.currentTime = 0;
     setPlaying(false);
   };
-
   const toggleTouch = () => (playing ? stop() : start());
+
+  // If the poster 404s, fall back to an inline SVG background
+  const bgImage = `url("${poster}")`;
+  const fallbackBg = `url("${fallbackSVG(fallbackLabel)}")`;
 
   return (
     <div
-      ref={containerRef}
-      className={`relative ${className ?? ""}`}
+      ref={ref}
       onMouseEnter={start}
       onMouseLeave={stop}
       onTouchStart={toggleTouch}
+      aria-label={alt}
+      className={`relative ${className ?? ""}`}
+      style={{
+        // Always-visible poster as CSS background
+        backgroundImage: `${bgImage}, ${fallbackBg}`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        // Ensure the layer paints
+        width: "100%",
+        height: "100%",
+      }}
     >
-      {/* Always-visible poster (with fallback) */}
-      <ImageWithFallback
-        src={poster}
-        alt={alt}
-        fallbackLabel={fallbackLabel}
-        className="absolute inset-0 h-full w-full object-cover z-[1]"
-      />
-
-      {/* Video fades on top; no black frame because poster sits underneath */}
+      {/* Only the video is layered; poster is handled by background */}
       <video
         ref={videoRef}
-        className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-300 z-[2] ${
+        className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-300 ${
           playing && ready && !reduced ? "opacity-100" : "opacity-0"
         }`}
         muted
         playsInline
         preload="metadata"
         loop
+        // poster still helps some browsers, but background ensures visibility
         poster={poster}
         onCanPlay={() => setReady(true)}
         onLoadedData={() => setReady(true)}
-        onError={() => {
-          setReady(false);
-          setPlaying(false);
-          console.warn("Video failed to load:", videoSrc);
-        }}
+        onError={() => { setReady(false); setPlaying(false); }}
         tabIndex={-1}
-        aria-label={alt}
       >
         <source src={videoSrc} type="video/mp4" />
       </video>
 
-      {/* Subtle overlay for readability */}
-      <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/20 via-transparent to-black/10 z-[3]" />
+      {/* Subtle overlay */}
+      <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/20 via-transparent to-black/10" />
     </div>
   );
 }
+
 
 function ServiceBlock({
   id,
@@ -439,31 +443,29 @@ function ServiceBlock({
 
         {/* MEDIA */}
         <div
-          className="rounded-2xl overflow-hidden border border-zinc-800 shadow-2xl relative"
-          // Inline style guarantees height even if Tailwind’s arbitrary classes don’t compile
-          style={{ aspectRatio: "16 / 9", minHeight: 360 }}
+       className="rounded-2xl overflow-hidden border border-zinc-800 shadow-2xl relative"
+       style={{ aspectRatio: "16 / 9", minHeight: 360 }}
         >
-          {videoSrc ? (
-            // Video fades in on hover/tap; poster is underneath
-            <HoverVideoPoster
-              poster={imageSrc}
-              videoSrc={videoSrc}
-              alt={imageAlt}
-              fallbackLabel={title}
-              className="absolute inset-0"
-            />
-          ) : (
-            // IMPORTANT: not absolute—so it paints even if the container collapses
-            <ImageWithFallback
-              src={imageSrc}
-              alt={imageAlt}
-              fallbackLabel={title}
-              className="block h-full w-full object-cover"
-            />
-          )}
-          {/* subtle readability overlay */}
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-black/10" />
-        </div>
+      {videoSrc ? (
+        <HoverVideoPoster
+           poster={imageSrc}
+            videoSrc={videoSrc}
+           alt={imageAlt}
+          fallbackLabel={title}
+           className="absolute inset-0"
+       />
+  ) : (
+    // Non-video path still shows the poster as a normal img
+    <ImageWithFallback
+      src={imageSrc}
+      alt={imageAlt}
+      fallbackLabel={title}
+      className="block h-full w-full object-cover"
+      loading="eager"
+    />
+  )}
+</div>
+
 
         {/* COPY */}
         <div>
