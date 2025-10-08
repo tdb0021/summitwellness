@@ -295,7 +295,7 @@ function ContactForm() {
 
       if (res.ok) {
         setStatus("ok");
-        setMsg("We’ve received your request.");
+        setMsg("Thanks! We’ve received your request. One of our nurses will contact you soon!");
         setValues({ name: "", email: "", phone: "", message: "" });
       } else {
         console.warn("Netlify POST failed:", res.status, res.statusText);
@@ -337,7 +337,7 @@ function ContactForm() {
               <Input name="name" placeholder="Your name" value={values.name} onChange={onChange} required />
               <Input name="email" type="email" placeholder="Email" value={values.email} onChange={onChange} required />
             </div>
-            <Input name="phone" placeholder="Phone (optional)" value={values.phone} onChange={onChange} />
+            <Input name="phone" placeholder="Phone" value={values.phone} onChange={onChange} />
             <Textarea
               name="message"
               placeholder="How can we help?"
@@ -571,7 +571,7 @@ function ServiceBlock({
             </>
           )}
 
-          <ul className="mt-5 space-y-2 text-zinc-300">
+          <ul className="mt-5 mb-5 md:mb-6 space-y-2 text-zinc-300">
             {bullets.map((b) => (
               <li key={b} className="flex items-start gap-2">
                 <Check className="h-5 w-5 shrink-0" /> <span>{b}</span>
