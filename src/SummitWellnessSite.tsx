@@ -50,6 +50,19 @@ const fallbackSVG = (label: string) =>
     `<?xml version='1.0'?><svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 720'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='#0a0a0a'/><stop offset='1' stop-color='#18181b'/></linearGradient></defs><rect width='1200' height='720' fill='url(#g)'/><text x='50%' y='50%' fill='#a1a1aa' font-size='42' font-family='system-ui,Segoe UI,Roboto' text-anchor='middle' dominant-baseline='middle'>${label}</text></svg>`
   );
 
+function useMediaQuery(query: string) {
+  const [matches, set] = React.useState(false);
+  React.useEffect(() => {
+    const mq = window.matchMedia(query);
+    const on = (e: MediaQueryListEvent | MediaQueryList) => set('matches' in e ? e.matches : (e as MediaQueryList).matches);
+    on(mq);
+    mq.addEventListener?.('change', on as any);
+    return () => mq.removeEventListener?.('change', on as any);
+  }, [query]);
+  return matches;
+}
+
+
 function ImageWithFallback({
   src,
   alt,
@@ -532,30 +545,38 @@ function ServiceBlock({
 
       <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
         {/* MEDIA COLUMN */}
-        <div className={`min-w-0 ${reverse ? "lg:order-2" : ""}`}>
-          <div
-            className="relative w-full max-w-full rounded-2xl overflow-hidden border border-zinc-800 shadow-2xl z-0"
-            style={{ aspectRatio: "16 / 9", minHeight: 360 }}
-          >
-            {videoSrc ? (
-              <HoverVideoPoster
-                poster={imageSrc}
-                videoSrc={videoSrc}
-                alt={imageAlt}
-                fallbackLabel={title}
-                className="absolute inset-0"
-              />
-            ) : (
-              <ImageWithFallback
-                src={imageSrc}
-                alt={imageAlt}
-                fallbackLabel={title}
-                className="block h-full w-full object-cover"
-              />
-            )}
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-black/10" />
-          </div>
-        </div>
+        
+      const isMdDown = useMediaQuery('(max-width: 768px)');   // tablets & phones
+      const isSmDown = useMediaQuery('(max-width: 640px)');   // phones
+
+        
+        let minH = 360;           // desktop
+        if (isMdDown) minH = 260; // tablets
+        if (isSmDown) minH = 200; // phones
+
+      <div
+       className="relative w-full max-w-full rounded-2xl overflow-hidden border border-zinc-800 shadow-2xl z-0"
+        style={{ aspectRatio: '16 / 9', minHeight: minH }}>
+     {videoSrc ? (
+    <HoverVideoPoster
+      poster={imageSrc}
+      videoSrc={videoSrc}
+      alt={imageAlt}
+      fallbackLabel={title}
+      className="absolute inset-0"
+    />
+  ) : (
+      <ImageWithFallback
+      src={imageSrc}
+      alt={imageAlt}
+      fallbackLabel={title}
+      className="block h-full w-full object-cover"
+      loading="eager"
+      />
+      )}
+    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-black/10" />
+  </div>
+
 
         {/* TEXT COLUMN */}
         <div className={`min-w-0 ${reverse ? "lg:order-1" : ""}`}>
