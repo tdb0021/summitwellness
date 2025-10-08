@@ -439,7 +439,7 @@ function HoverVideoPoster({
 
   const start = () => {
     if (reduced || !videoRef.current) return;
-    videoRef.current.play().catch(() => {});
+    videoRef.current.play().catch(() => { });
     setPlaying(true);
   };
   const stop = () => {
@@ -476,22 +476,32 @@ function HoverVideoPoster({
       {/* Only the video is layered; poster is handled by background */}
       <video
         ref={videoRef}
-        className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-300 ${
-          playing && ready && !reduced ? "opacity-100" : "opacity-0"
-        }`}
+        className={`absolute transition-opacity duration-300 ${playing && ready && !reduced ? "opacity-100" : "opacity-0"
+          }`}
+        // Overscan by 1px to kill sub-pixel gaps on mobile
+        style={{
+          inset: -1, // -1px on all sides
+          width: "calc(100% + 2px)",
+          height: "calc(100% + 2px)",
+          objectFit: "cover",
+          WebkitTransform: "translateZ(0)", // mobile/safari: avoid pixel snapping
+          transform: "translateZ(0)",
+          willChange: "opacity, transform",
+        }}
         muted
         playsInline
         preload="metadata"
         loop
-        // poster still helps some browsers, but background ensures visibility
         poster={poster}
         onCanPlay={() => setReady(true)}
         onLoadedData={() => setReady(true)}
         onError={() => { setReady(false); setPlaying(false); }}
         tabIndex={-1}
+        aria-label={alt}
       >
         <source src={videoSrc} type="video/mp4" />
       </video>
+
 
       {/* Subtle overlay */}
       <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/20 via-transparent to-black/10" />
