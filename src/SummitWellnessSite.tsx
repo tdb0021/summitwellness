@@ -900,8 +900,17 @@ export default function SummitWellnessSite() {
             <a href="#packages" className="hover:text-white">Packages</a>
             <a href="#pricing" className="hover:text-white">Pricing</a>
             <a href="#contact" className="hover:text-white">Contact</a>
+            <a
+              href="https://blog.summitwellnessoba.com"
+              className="hover:text-white"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Blog
+            </a>
+
           </nav>
-          
+
           {/* Right side of header */}
           <div className="flex items-center gap-2">
             {/* Mobile hamburger */}
