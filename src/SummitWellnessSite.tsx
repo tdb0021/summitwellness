@@ -145,7 +145,7 @@ const faqs = [
 
 const priceTiles = [
   { title: "Hyperbaric Therapy", price: "$125", sub: "/ session", items: ["First-time discount available", "5 and 10-pack pricing", "Proven results"] },
-  { title: "Mobile IV Therapy", price: "From $165*", sub: " + after hours fee if applicable", items: ["Hydration, Performance, Immunity", "Group/Event discounts", "Hotel, home, or gym"] },
+  { title: "Mobile IV Therapy", price: "From $165*", items: ["Hydration, Performance, Immunity", "Group/Event discounts", "Hotel, home, or gym"] },
   { title: "Unlimited Recovery", price: "$250", sub: "/ month", items: ["Unlimited Sauna + Cold Plunge", "Unlimited NormaTec Compression", "IV/Hyperbaric therapy add-on rates"] },
 ] as const;
 
