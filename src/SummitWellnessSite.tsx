@@ -121,7 +121,7 @@ const p = "text-base md:text-lg text-zinc-300";
 
 const features = [
   { icon: Droplet, id: "iv", title: "IV Therapy", desc: "Hydration, performance, recovery, and immunity protocols. Treatment available on-site or in-home." },
-  { icon: Syringe, id: "injections", title: "Injections", desc: "High-dose Vitamin C, NAD+, B12, Super B, lipo, and more performance blends administered by licensed nurses." },
+  { icon: Syringe, id: "injections", title: "Injections", desc: "Tri-Immune, NAD+, B12, Super B, Lipo, and more performance blends administered by licensed nurses." },
   { icon: ThermometerSnowflake, id: "plunge", title: "Cold Plunge", desc: "Low-temp immersion for recovery and resilience. Pair with sauna for contrast therapy." },
   { icon: Flame, id: "sauna", title: "Full-Spectrum IR Sauna", desc: "Detox, circulation, and relaxation with infrared heat across all wavelengths at temperatures up to 160 degrees." },
   { icon: HeartPulse, id: "hbot", title: "Hyperbaric Chamber", desc: "1:1 sessions focused on recovery and healing. First-time and package discounts available." },
@@ -136,7 +136,7 @@ const protocols = [
 
 const faqs = [
   { q: "Who is Summit Wellness for?", a: "Young, health-minded locals and visiting athletes who want fast recovery, more energy, and long-term performance." },
-  { q: "Do you offer mobile IVs?", a: "Yes. Our nursing team can come to your home, hotel, gym, or event. Subject to travel and call-out fees." },
+  { q: "Do you offer mobile IVs?", a: "Yes. Our nursing team can come to your home, hotel, gym, or event. Subject to travel and after-hours fees." },
   { q: "How much is Hyperbaric?", a: "$125 per session. First-time discount and multi-session packages available." },
   { q: "Do you have memberships?", a: "Yes. Monthly options include unlimited sauna, cold plunge, and compression. IVs and Hyperbaric therapy offered as add-ons or packages." },
   { q: "Do you provide medical oversight?", a: "Yes. In-house Nurse Practitioner and an off-site Medical Director." },
@@ -145,7 +145,7 @@ const faqs = [
 
 const priceTiles = [
   { title: "Hyperbaric Therapy", price: "$125", sub: "/ session", items: ["First-time discount available", "5 and 10-pack pricing", "Proven results"] },
-  { title: "Mobile IV Therapy", price: "From $165*", sub: " + call-out", items: ["Hydration, Performance, Immunity", "Group/Event discounts", "Hotel, home, or gym"] },
+  { title: "Mobile IV Therapy", price: "From $165*", sub: " + after hours fee if applicable", items: ["Hydration, Performance, Immunity", "Group/Event discounts", "Hotel, home, or gym"] },
   { title: "Unlimited Recovery", price: "$250", sub: "/ month", items: ["Unlimited Sauna + Cold Plunge", "Unlimited NormaTec Compression", "IV/Hyperbaric therapy add-on rates"] },
 ] as const;
 
@@ -1004,7 +1004,7 @@ export default function SummitWellnessSite() {
                 Our team is practical and clinical. Experienced nurses are supported by our in-house Nurse Practitioner and all treatments are cleared by our medical director. We keep the process simple, explain what matters, and skip the noise.
               </p>
               <p className="text-sm mt-3">
-                Care is tailored, not templated. If you need quick turnaround, we stack IVs with compression, infrared sauna, or cold plunge. If you need deeper answers, we use GI-MAP and vitamin panels to target deficiencies, then dial in injections (e.g., high-dose Vitamin C, NAD+) and session frequency. Whether you’re training, traveling, or rebuilding, we match the plan to your calendar and goals.
+                Care is tailored, not templated. If you need quick turnaround, we stack IVs with compression, infrared sauna, or cold plunge. If you need deeper answers, we use GI-MAP and vitamin panels to target deficiencies, then dial in injections (e.g., Tri-Immune, NAD+) and session frequency. Whether you’re training, traveling, or rebuilding, we match the plan to your calendar and goals.
               </p>
             </CardContent>
             <div className="relative aspect-[16/9]">
@@ -1036,7 +1036,7 @@ export default function SummitWellnessSite() {
       <ServiceBlock
         id="injections"
         title="Injections"
-        desc="High-dose Vitamin C, NAD+, B12, and lipo injections tailored to your goals and labs."
+        desc="Tri-Immune, NAD+, B12, and lipo injections tailored to your goals and labs."
         bullets={["Clinician-guided dosing", "Quick visits, big impact", "Add to IVs or stand-alone"]}
         imageSrc={IMG.injections}
         imageAlt="Injection services"
@@ -1044,7 +1044,7 @@ export default function SummitWellnessSite() {
         extra={
           <>
             <p>Our injection therapies deliver targeted nutrients and medications in minutes—no IV required. From easing pain or nausea to boosting energy, metabolism, and immunity, injections are a fast way to feel your best.</p>
-            <p className="mt-3">Options include: Pepcid, Zofran, Toradol, CoQ10, Vitamin D, Vitamin C, Super B + MIC, Glutathione, and NAD+. Each works to support energy, recovery, wellness, and overall performance—so you can get back to living at full speed.</p>
+            <p className="mt-3">Options include: Pepcid, Zofran, Toradol, CoQ10, Vitamin D, Super B + MIC, Glutathione, and NAD+. Each works to support energy, recovery, wellness, and overall performance—so you can get back to living at full speed.</p>
           </>
         }
         reverse
@@ -1133,7 +1133,7 @@ export default function SummitWellnessSite() {
       <section id="pricing" className={`${section} py-12 md:py-16`}>
         <SectionHeader overline="Transparent" title="Sample Pricing" desc="Exact pricing varies by formulation, duration, and membership status." />
         <PriceTiles />
-        <p className="text-center text-sm text-zinc-400 mt-6">* Mobile visits may include travel/call-out fees. Contact us for a precise quote.</p>
+        <p className="text-center text-sm text-zinc-400 mt-6">* Mobile visits may include travel/after hours fees. Contact us for a precise quote.</p>
       </section>
 
       {testimonials.length > 0 && (
@@ -1169,7 +1169,7 @@ export default function SummitWellnessSite() {
             <div className="text-zinc-300 font-medium mb-3">Services</div>
             <ul className="space-y-2 text-zinc-400">
               <li>IV Therapy (Mobile + In-Studio)</li>
-              <li>Injections (Vit C, NAD+, B12)</li>
+              <li>Injections (Tri-Immune, NAD+, B12)</li>
               <li>IR Sauna & Cold Plunge</li>
               <li>Hyperbaric Oxygen</li>
               <li>NormaTec Compression</li>
