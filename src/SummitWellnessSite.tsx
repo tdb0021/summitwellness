@@ -34,9 +34,7 @@ const paths = {
   staff: "/images/staff.jpg",
   services: "/images/services.jpg",
   gi: "/images/GI.jpg",
-  // keep both; we’ll try .jpg first, then .jpj as a fallback in the rotator
   supplements1_jpg: "/images/supplements1.jpg",
-  supplements1_jpj: "/images/supplements1.jpj",
   supplements2: "/images/supplements2.jpg",
   supplements3: "/images/supplements3.jpg",
   salt: "/images/salt.jpg",
@@ -120,51 +118,44 @@ const h2 = "text-3xl md:text-4xl font-semibold tracking-tight";
 const p = "text-base md:text-lg text-zinc-300";
 
 const features = [
-  { icon: Droplet, id: "iv", title: "IV Therapy", desc: "Hydration, performance, recovery, and immunity protocols. Treatment available on-site or in-home." },
-  { icon: Syringe, id: "injections", title: "Injections", desc: "Tri-Immune, NAD+, B12, Super B, Lipo, and more performance blends administered by licensed nurses." },
-  { icon: ThermometerSnowflake, id: "plunge", title: "Cold Plunge", desc: "Low-temp immersion for recovery and resilience. Pair with sauna for contrast therapy." },
-  { icon: Flame, id: "sauna", title: "Full-Spectrum IR Sauna", desc: "Detox, circulation, and relaxation with infrared heat across all wavelengths at temperatures up to 160 degrees." },
-  { icon: HeartPulse, id: "hbot", title: "Hyperbaric Chamber", desc: "1:1 sessions focused on recovery and healing. First-time and package discounts available." },
-  { icon: Activity, id: "compression", title: "NormaTec Compression", desc: "Air compression tech to speed recovery and reduce soreness between training blocks." },
+  { icon: Droplet, id: "iv", title: "IV Therapy", desc: "Hydration, performance, recovery, and wellness IV protocols - administered by licensed nurses in-studio or through our mobile service."},
+  { icon: Syringe, id: "injections", title: "Injections", desc: "Personalized wellness injections designed to support hydration, recovery, and overall vitality - provided by licensed clinical staff."},
+  { icon: ThermometerSnowflake, id: "plunge", title: "Cold Plunge", desc: "Chilled immersion designed to help refresh, reset, and invigorate the body. Pair with sauna sessions for a balanced contrast experience." },
+  { icon: Flame, id: "sauna", title: "Full-Spectrum IR Sauna", desc: "Experience gentle, full-spectrum infrared heat at temperatures up to 160 degrees designed to promote relaxation and rejuvenation." },
+  { icon: HeartPulse, id: "hbot", title: "Hyperbaric Chamber", desc: "Personalized hyperbaric sessions designed to support relaxation, energy, and overall wellness." },
+  { icon: Activity, id: "compression", title: "NormaTec Compression", desc: "Dynamic air compression designed to help refresh tired muscles and support post-activity wellness. A favorite among athletes." },
 ] as const;
 
 const protocols = [
-  { name: "Recovery Stack", bullets: ["Performance IV (post-training)", "NormaTec 30 min", "Cold Plunge 5–10 min"], notes: "Designed for athletes and active adults." },
-  { name: "Contrast Therapy", bullets: ["IR Sauna 30–45 min", "Cold Plunge 3–5 min", "Breathwork guidance"], notes: "Great for resilience and metabolic benefits." },
-  { name: "Hyperbaric Chamber + Rebuild", bullets: ["Hyperbaric session", "B-Complex/NAD+ injection", "Hydration IV add-on"], notes: "Support tissue recovery and cognitive clarity." },
+  { name: "Recovery Stack", description: "Wellness-focused combination featuring an IV session, compression therapy, and cold immersion for a complete refresh experience.", bullets: ["IV hydration session (post-activity)", "NormaTec Compression (30 minutes)", "Cold Plunge (3–5 minutes)"], notes: "Created for active individuals looking to recharge and restore balance." },
+  { name: "Cold + Heat Reset", description: "A restorative blend of sauna, cold immersion, and guided breathwork designed to refresh both body and mind.", bullets: ["Full-spectrum Infrared Sauna", "Cold Plunge Session", "Guided Breathwork Experience"], notes: "Experience temperature transitions that promote focus, relaxation, and balanced wellness." },
+  { name: "Hyperbaric + Rebuild", description: "A revitalizing wellness combination featuring a hyperbaric session, nutrient injection, and IV hydration add-on. ", bullets: ["Hyperbaric Session", "B-Complex/NAD+ based nutrient injection", "Hydration IV add-on"], notes: "This trio is designed to help restore balance, promote energy, and support overall vitality." },
 ] as const;
 
-const faqs = [
-  { q: "Who is Summit Wellness for?", a: "Young, health-minded locals and visiting athletes who want fast recovery, more energy, and long-term performance." },
-  { q: "Do you offer mobile IVs?", a: "Yes. Our nursing team can come to your home, hotel, gym, or event. Subject to travel and after-hours fees." },
-  { q: "How much is Hyperbaric?", a: "$125 per session. First-time discount and multi-session packages available." },
-  { q: "Do you have memberships?", a: "Yes. Monthly options include unlimited sauna, cold plunge, and compression. IVs and Hyperbaric therapy offered as add-ons or packages." },
-  { q: "Do you provide medical oversight?", a: "Yes. In-house Nurse Practitioner and an off-site Medical Director." },
-  { q: "Do you offer functional medicine testing?", a: "Yes—GI-MAP stool testing, vitamin deficiency panels, peptide consults, and targeted protocols." },
-] as const;
+
 
 const priceTiles = [
-  { title: "Hyperbaric Therapy", price: "$125", sub: "/ session", items: ["First-time discount available", "5 and 10-pack pricing", "Proven results"] },
-  { title: "Mobile IV Therapy", price: "From $165*", items: ["Hydration, Performance, Immunity", "Group/Event discounts", "Hotel, home, or gym"] },
-  { title: "Unlimited Recovery", price: "$250", sub: "/ month", items: ["Unlimited Sauna + Cold Plunge", "Unlimited NormaTec Compression", "IV/Hyperbaric therapy add-on rates"] },
+  { title: "Hyperbaric Therapy", price: "$125", sub: "/ session", items: ["First-time discount available", "5 and 10-pack pricing", "Add-on discount availble"] },
+  { title: "Mobile IV Therapy", price: "From $165*", sub: "/ each", items: ["Hydration, Energy, Wellness Support", "Group/Event discounts", "Hotel, home, or gym"] },
+  { title: "Unlimited Recovery", price: "$250", sub: "/ month", items: ["Unlimited Sauna + Cold Plunge", "Unlimited NormaTec Compression", "Add-on rates for IV & Hyperbaric sessions"] },
 ] as const;
 
 const testimonials: string[] = [
-  "The nurse was super friendly and professional; the in-home service for our group made it easy. The IV helped tremendously and the whole process was smooth—highly recommend.",
-  "Amazing ambiance and a spotless facility. I did an IV with glutathione, NormaTec sessions, infrared sauna with kombucha, and a cold plunge—left with so much energy. Will be back to try the hyperbaric chamber.",
-  "They sent a nurse to us the same day—kind and caring. I felt the difference almost immediately and finally enjoyed the beach without pain. Will definitely use them again.",
-  "When I’m drained or dehydrated, an IV here brings me back fast. The team is knowledgeable and points you in the right direction—now part of my routine for hydration and migraines.",
-  "GI-MAP testing was extremely informative and gave me a plan without prescriptions. My rash is already improving with less inflammation and itch—I’m grateful for the natural approach.",
-  "Tried hyperbaric oxygen and the nursing staff checked on me throughout—great experience. I’m glad there’s a reliable spot for HBOT here.",
+  "The nurse was super friendly and professional, and the in-home service for our group made everything easy. The IV process was smooth from start to finish—highly recommend.",
+  "Amazing ambiance and a spotless facility. I booked an IV with Glutathione, NormaTec sessions, an infrared sauna, and a cold plunge—left feeling refreshed and re-energized. Excited to come back and try the hyperbaric chamber.",
+  "They sent a nurse to us the same day—kind, caring, and professional. I noticed the difference right away and finally enjoyed my vacation comfortably. I’ll definitely book again.",
+  "When I’m drained or dehydrated, an IV here helps me feel refreshed fast. The team is knowledgeable and always points me in the right direction—now part of my regular wellness routine.",
+  "GI-MAP testing was extremely informative and gave me a clear wellness plan. I’ve already noticed improvements and appreciate their natural, educational approach.",
+  "I tried a hyperbaric oxygen session and the nursing staff checked on me throughout—such a great experience. I’m glad there’s a reliable wellness spot for this locally.",
 ];
 
 const functionalCards = [
-  { title: "GI-MAP Testing", desc: "Identify hidden gut imbalances—such as bacteria, parasites, or inflammation—that may be affecting your digestion, energy, and overall health, giving you a clear roadmap for targeted care and lasting wellness." },
-  { title: "Vitamin & Micronutrient Panels", desc: "Comprehensive panels measure key vitamins, minerals, and antioxidants to reveal hidden deficiencies, optimize energy, and support long-term health with a personalized plan." },
-  { title: "Peptide Therapy", desc: "Personalized peptide protocols to support recovery, sleep, body composition, and performance—selected by your clinician, monitored, and adjusted to your response." },
-  { title: "Weight-Loss Consults", desc: "Evidence-based coaching with labs-informed guidance and medication options when appropriate—built to improve energy, metabolism, and long-term habits, not just the scale." },
-  { title: "NAD+ Support", desc: "Targeted NAD+ injections and IV add-ons to boost cellular energy, focus, and recovery—dosed for effectiveness while minimizing side effects." },
-  { title: "Customized Protocols", desc: "Your Nurse Practitioner designs a step-by-step plan from your labs and goals—then refines it over time for measurable, sustainable results." },
+  { title: "GI-MAP Wellness Testing", desc: "Advanced gut health testing designed to provide insights into your digestive wellness and overall vitality. Our clinical team reviews results and offers personalized guidance to help you make informed choices for long-term balance." },
+  { title: "Vitamin & Micronutrient Panels", desc: "Comprehensive wellness panels designed to provide insight into your nutrient balance and overall vitality. Our clinical team reviews results and offers personalized recommendations to help you support energy, recovery, and long-term wellness." },
+  { title: "Peptide Consultations", desc: "Personalized wellness consultations focused on education and guidance around peptide-based wellness plans. Our clinicians provide oversight, support, and ongoing evaluation to help you make informed choices that align with your goals." },
+  { title: "Metabolic & Lifestyle Consults", desc: "Personalized wellness injections and IV add-ons designed to promote balance, energy, and overall vitality. Each session is guided by licensed clinical staff and tailored to complement your wellness goals." },
+  { title: "Cellular Wellness Support", desc: "Targeted NAD+ injections and IV add-ons to boost cellular energy, focus, and recovery—dosed for effectiveness while minimizing side effects." },
+  { title: "Customized Wellness Plans", desc: "Your Nurse Practitioner creates a personalized plan based on your wellness goals and health insights—refined over time to support lasting balance and measurable progress." },
 ] as const;
 
 function SectionHeader({ overline, title, desc }: { overline?: string; title: string; desc?: string }) {
@@ -211,7 +202,7 @@ function ProtocolCards() {
       {protocols.map((pSet) => (
         <Card key={pSet.name} className="bg-zinc-900/60 border-zinc-800">
           <CardHeader>
-            <CardTitle className="text-zinc-100">{pSet.name}</CardTitle>
+            <CardTitle className="text-zinc-100">{pSet.name} <h3 className="text-sm text-zinc-400 mt-4">{pSet.description}</h3></CardTitle>
           </CardHeader>
           <CardContent>
             <ul className="space-y-2 text-zinc-300">
@@ -261,22 +252,6 @@ function PriceTiles() {
   );
 }
 
-function FAQ() {
-  return (
-    <div className="grid md:grid-cols-2 gap-6">
-      {faqs.map((f, idx) => (
-        <Card key={idx} className="bg-zinc-900/60 border-zinc-800">
-          <CardHeader>
-            <CardTitle className="text-zinc-100">{f.q}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-zinc-300">{f.a}</p>
-          </CardContent>
-        </Card>
-      ))}
-    </div>
-  );
-}
 
 function ContactForm() {
   const [status, setStatus] = React.useState<"idle" | "sending" | "ok" | "error">("idle");
@@ -659,11 +634,11 @@ function SocialLinks() {
 }
 
 
-/** Image rotator with fallback for the ‘supplements1.jpj’ slip */
+/** Image rotator */
 function FunctionalRotator() {
   const slides: string[][] = [
     [IMG.gi],
-    [IMG.supplements1_jpg, IMG.supplements1_jpj], // try .jpg, then .jpj if that’s the saved file
+    [IMG.supplements1_jpg], 
     [IMG.supplements2],
     [IMG.supplements3],
     [IMG.salt],
@@ -742,11 +717,11 @@ function useSmoothAnchors(offset: number = 80) {
 
 function ServicesDropdown() {
   const items = [
-    { href: "#iv", label: "IV Therapy" },
+    { href: "#iv", label: "IV Hydration" },
     { href: "#injections", label: "Injections" },
     { href: "#plunge", label: "Cold Plunge" },
     { href: "#sauna", label: "Infrared Sauna" },
-    { href: "#hbot", label: "Hyperbaric Chamber" },
+    { href: "#hbot", label: "Hyperbaric Oxygen" },
     { href: "#compression", label: "NormaTec Compression" },
     { href: "#functional", label: "Functional Medicine & Testing" },
   ];
@@ -945,11 +920,18 @@ export default function SummitWellnessSite() {
         <div className="grid lg:grid-cols-2 gap-10 items-center">
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
             <h1 className="text-4xl md:text-6xl font-semibold tracking-tight text-white">
-              Performance & Recovery, <span className="text-zinc-300">Done Right</span>
+              Performance & Recovery, <span className="text-zinc-300">Done Right.</span>
             </h1>
             <p className={`${p} mt-6 max-w-2xl`}>
-              IVs, injections, contrast therapy, hyperbaric oxygen, and compression—built for active locals and high-performance travelers. Mobile nurses available.
-            </p>
+              Restore, recharge, and perform at your best with wellness services designed for active lifestyles and high-performance travelers.
+              Our licensed clinical team offers IV therapy, nutrient injections, contrast therapy, hyperbaric oxygen, and compression sessions—all crafted to support recovery, hydration, and overall wellness.</p>
+            <p className={`${p} mt-6 max-w-2xl`}>Available in-studio or mobile:</p>
+            <ul className="list-disc list-outside text-zinc-300 mt-2 max-w-2xl pl-8">
+              <li>Same-day mobile appointments</li>
+              <li>Group and event sessions</li>
+              <li>Membership options for ongoing wellness</li>
+            </ul>
+
             <div className="flex flex-wrap gap-3 mt-8">
               <Button asChild><a href="#contact">Book an IV</a></Button>
               <Button asChild variant="outline" className="border-zinc-700 text-zinc-200 hover:bg-zinc-900"><a href="#contact">Explore Memberships</a></Button>
@@ -965,12 +947,12 @@ export default function SummitWellnessSite() {
               <div className="absolute inset-0 bg-gradient-to-tr from-black/50 via-transparent to-black/30" />
             </div>
             <div className="mt-4 grid grid-cols-3 gap-4 text-sm">
-              <div className="bg-zinc-900/60 rounded-xl p-4 border border-zinc-800"><Droplet className="h-5 w-5 mb-2" />IV Therapy</div>
-              <div className="bg-zinc-900/60 rounded-xl p-4 border border-zinc-800"><HeartPulse className="h-5 w-5 mb-2" />Hyperbaric Chamber</div>
+              <div className="bg-zinc-900/60 rounded-xl p-4 border border-zinc-800"><Droplet className="h-5 w-5 mb-2" />IV Hydration</div>
+              <div className="bg-zinc-900/60 rounded-xl p-4 border border-zinc-800"><HeartPulse className="h-5 w-5 mb-2" />Hyperbaric Oxygen</div>
               <div className="bg-zinc-900/60 rounded-xl p-4 border border-zinc-800"><ThermometerSnowflake className="h-5 w-5 mb-2" />Cold Plunge</div>
-              <div className="bg-zinc-900/60 rounded-xl p-4 border border-zinc-800"><Flame className="h-5 w-5 mb-2" />IR Sauna</div>
-              <div className="bg-zinc-900/60 rounded-xl p-4 border border-zinc-800"><Activity className="h-5 w-5 mb-2" />Compression</div>
-              <div className="bg-zinc-900/60 rounded-xl p-4 border border-zinc-800"><Syringe className="h-5 w-5 mb-2" />Injections</div>
+              <div className="bg-zinc-900/60 rounded-xl p-4 border border-zinc-800"><Flame className="h-5 w-5 mb-2" />Infrared Sauna</div>
+              <div className="bg-zinc-900/60 rounded-xl p-4 border border-zinc-800"><Activity className="h-5 w-5 mb-2" />NormaTec Compression</div>
+              <div className="bg-zinc-900/60 rounded-xl p-4 border border-zinc-800"><Syringe className="h-5 w-5 mb-2" />Nutrient Injections</div>
             </div>
           </motion.div>
         </div>
@@ -994,18 +976,16 @@ export default function SummitWellnessSite() {
             </div>
             <CardContent className="pt-6 text-zinc-300 flex-1">
               <p className="text-sm">
-                We started Summit Wellness to make performance medicine straightforward: fast recovery when you need it, and data-driven care when it matters.
-                Too many active people were cycling through IVs, recovery methods and health goals without a plan. We built a clinic that delivers both—quick interventions and long-term direction.
+                We started Summit Wellness to make performance and recovery simple—fast support when you need it, and personalized guidance when it matters. Too many active people were cycling through IVs, recovery tools, and wellness goals without a clear plan. We built a clinic that combines both: efficient sessions and long-term wellness direction.
               </p>
               <p className="text-sm mt-3">
-                Clients choose us for three reasons – speed, standards, and outcomes. Same-day mobile IVs and efficient in-studio sessions; licensed nurses with an in-house Nurse Practitioner, MD oversight, and athlete-grade sanitation and dosing; protocols that are measured and adjusted, not guessed—based on your needs and goals.
+                Clients choose us for three reasons – speed, standards, and results. Same-day mobile IVs and efficient in-studio sessions; licensed staff with MD oversight, and athlete-grade sanitation; protocols that are measured and adjusted, not guessed—based on your needs and goals.
               </p>
               <p className="text-sm mt-3">
-                Our team is practical and clinical. Experienced nurses are supported by our in-house Nurse Practitioner and all treatments are cleared by our medical director. We keep the process simple, explain what matters, and skip the noise.
+                 Our team blends practical experience with clinical precision. Every service is designed and supervised by medical professionals to ensure safety, consistency, and care you can trust.
               </p>
               <p className="text-sm mt-3">
-                Care is tailored, not templated. If you need quick turnaround, we stack IVs with compression, infrared sauna, or cold plunge. If you need deeper answers, we use GI-MAP and vitamin panels to target deficiencies, then dial in injections (e.g., Tri-Immune, NAD+) and session frequency. Whether you’re training, traveling, or rebuilding, we match the plan to your calendar and goals.
-              </p>
+                Whether you’re training, traveling, or recharging, Summit Wellness helps you stay balanced, recovered, and ready for what’s next. It’s not just about feeling better today—it’s about building resilience for tomorrow.</p>
             </CardContent>
             <div className="relative aspect-[16/9]">
               <ImageWithFallback src={IMG.team2} fallbackLabel="Team" alt="Summit Wellness team" className="absolute inset-0 h-full w-full object-cover" />
@@ -1016,7 +996,7 @@ export default function SummitWellnessSite() {
       </section>
 
       <section id="packages" className={`${section} py-12 md:py-16`}>
-        <SectionHeader overline="Curated Bundles" title="Protocols & Packages" desc="Proven stacks for recovery, resilience, and cognitive clarity." />
+        <SectionHeader overline="Curated Bundles" title="Protocols & Packages" desc="Personalized wellness bundles designed to simplify your routine and help you feel your best." />
         <ProtocolCards />
         <div className="mt-8 text-center"><Button asChild><a href="#contact">See Membership Options</a></Button></div>
       </section>
@@ -1024,27 +1004,27 @@ export default function SummitWellnessSite() {
       <ServiceBlock
         id="iv"
         title="IV Therapy"
-        desc="Hydration, performance, immunity, and recovery IVs administered by licensed nurses—in studio or mobile."
-        bullets={["Same-day mobile availability", "Group/event discounts", "Custom add-ons (B-complex, NAD+ support)"]}
+        desc="Personalized IV hydration designed to support energy, hydration, and overall wellness—provided by licensed nurses, in-studio or mobile. "
+        bullets={["Same-day mobile availability", "Group & Event options", "Customizable nutrient blends (e.g., B-complex, hydration support)"]}
         imageSrc={IMG.iv}
         imageAlt="IV therapy at Summit Wellness"
         videoSrc="/videos/iv.mp4"
-        extra="IV therapy offers rapid hydration and essential nutrients directly into your bloodstream—far beyond what water or oral supplements can do. Fluids shouldn’t be limited to hospital care; they’re an effective tool for recovery, energy, and overall wellness in everyday life. IV bags can be customized with add-ons like vitamins, electrolytes, amino acids, and antioxidants to target your specific needs. Most people feel the effects almost immediately—boosting energy, focus, and recovery within minutes of treatment."
+        extra="IV therapy delivers fluids and nutrients to help your body stay balanced, hydrated, and performing at its best. It’s a simple, efficient way to support recovery, energy, and overall wellness beyond what typical hydration can offer. Our IV hydration sessions help restore balance, promote hydration, and support your active lifestyle. Each session is guided by our clinical team to complement your wellness goals and leave you feeling refreshed."
         primaryCta="Book an IV"
       />
 
       <ServiceBlock
         id="injections"
         title="Injections"
-        desc="Tri-Immune, NAD+, B12, and lipo injections tailored to your goals and labs."
-        bullets={["Clinician-guided dosing", "Quick visits, big impact", "Add to IVs or stand-alone"]}
+        desc="Personalized nutrient injections designed to complement your wellness goals and active lifestyle."
+        bullets={["Clinician-guided care", "Quick, convenient sessions", "Stand-alone or IV add-on options"]}
         imageSrc={IMG.injections}
         imageAlt="Injection services"
         videoSrc="/videos/injections.mp4"
         extra={
           <>
-            <p>Our injection therapies deliver targeted nutrients and medications in minutes—no IV required. From easing pain or nausea to boosting energy, metabolism, and immunity, injections are a fast way to feel your best.</p>
-            <p className="mt-3">Options include: Pepcid, Zofran, Toradol, CoQ10, Vitamin D, Super B + MIC, Glutathione, and NAD+. Each works to support energy, recovery, wellness, and overall performance—so you can get back to living at full speed.</p>
+            <p>Each formula is thoughtfully selected by our clinical team to support recovery, hydration, and vitality—no IV required. These treatments are designed to promote energy, recovery, and overall wellness, helping you feel your best fast.</p>
+            <p className="mt-3">Our injection menu includes nutrient-focused blends like B12, Vitamin D, CoQ10, and Glutathione to help you feel refreshed, balanced, and energized. </p>
           </>
         }
         reverse
@@ -1054,27 +1034,27 @@ export default function SummitWellnessSite() {
       <ServiceBlock
         id="plunge"
         title="Cold Plunge"
-        desc="Low-temperature immersion to reduce soreness, build resilience, and accelerate recovery."
-        bullets={["3–5 minute guided sessions", "Pair with sauna for contrast therapy", "Unlimited options with membership"]}
+        desc="Chilled immersion designed to refresh, reset, and invigorate both body and mind."
+        bullets={["3–5 minute guided sessions", "Pair with sauna for a balanced wellness experience", "Unlimited access with membership"]}
         imageSrc={IMG.plunge}
         imageAlt="Cold plunge"
         videoSrc="/videos/plunge.mp4"
-        extra="Cold plunge therapy works by triggering your body’s natural fight-or-flight response. When you immerse in cold water, blood vessels constrict, circulation increases, and your nervous system activates—boosting alertness, releasing endorphins, and priming your body for recovery. This powerful reset reduces inflammation, speeds recovery, strengthens mental resilience, and lifts mood and energy almost instantly. Just a few minutes in the plunge leaves you feeling sharper, lighter, and recharged—ready to take on anything."
+        extra="Cold immersion encourages a natural sense of alertness and rejuvenation, helping you feel restored and energized. These brief, guided sessions provide a refreshing reset that supports balance, focus, and overall vitality—leaving you clear-headed and ready to take on the day."
         primaryCta="Reserve Plunge"
       />
 
       <ServiceBlock
         id="sauna"
         title="Full-Spectrum Infrared Sauna"
-        desc="Detox and relax with near, mid, and far infrared heat—stack with plunge for metabolic benefits."
-        bullets={["30–45 minute sessions", "Private suite", "Member unlimited access"]}
+        desc="Experience full-spectrum near, mid, and far infrared heat designed to promote deep relaxation and rejuvenation."
+        bullets={["30–45 minute sessions", "Private suite", "Unlimited access for members"]}
         imageSrc={IMG.sauna}
         imageAlt="Infrared sauna"
         videoSrc="/videos/sauna.mp4"
         extra={
           <>
-            <p>Unlike traditional saunas that heat the air around you, infrared saunas use light waves to warm your body directly. This deeper penetration helps improve circulation, loosen tight muscles, and promote detox at the cellular level—all while operating at a more comfortable temperature.</p>
-            <p className="mt-3">Infrared therapy is known to support recovery, reduce inflammation, improve skin health, and even enhance metabolism. Clients often report better sleep, lower stress, and an overall sense of renewal after each session. The gentle, penetrating heat works with your body—not against it—so you leave feeling lighter, clearer, and recharged.</p>
+            <p>Infrared saunas use gentle light-based warmth that’s absorbed directly by your body—creating a soothing, restorative experience at a comfortable temperature. 
+              The combination of infrared and red-light wavelengths encourages balance, calm, and overall vitality while supporting relaxation from the inside out. </p>
           </>
         }
         reverse
@@ -1084,15 +1064,15 @@ export default function SummitWellnessSite() {
       <ServiceBlock
         id="hbot"
         title="Hyperbaric Oxygen Therapy"
-        desc="Targeted protocols for tissue oxygenation, recovery, and neuro support."
-        bullets={["$125/session (new client discount available)", "5 & 10-pack options", "Private treatment"]}
+        desc="Personalized hyperbaric sessions designed to support energy, focus, and overall wellness in a relaxing, private setting."
+        bullets={["1.5 ATA oxygen environment", "5 & 10-pack options", "Private experience"]}
         imageSrc={IMG.hbot}
         imageAlt="Hyperbaric chamber"
         videoSrc="/videos/hyperbaric.mp4"
         extra={
           <>
-            <p>Inside a hyperbaric chamber, you breathe 100% oxygen at increased pressure, allowing your lungs to absorb far more oxygen than normal. This surge delivers oxygen-rich blood to tissues and unlocks your body’s natural ability to heal at a faster rate.</p>
-            <p className="mt-3">Hyperbaric therapy supports recovery from injury, reduces inflammation, boosts energy, and promotes overall wellness. Many clients notice improved focus, faster recovery times, and enhanced resilience. By flooding your system with oxygen, Hyperbaric therapy helps your body repair, restore, and perform at its best.</p>
+            <p>Inside the hyperbaric chamber, you’ll relax in a pressurized environment at approximately 1.5 ATA, where you can breathe concentrated oxygen for a restorative wellness experience. These sessions are designed to promote balance, relaxation, and a sense of rejuvenation while supporting your active lifestyle and overall vitality.</p>
+            <p className="mt-3">Each experience is guided by trained staff, offering a calm, restorative environment to help you feel refreshed and recharged.</p>
           </>
         }
         primaryCta="Book Hyperbaric Therapy"
@@ -1102,22 +1082,22 @@ export default function SummitWellnessSite() {
         id="compression"
         title="NormaTec Compression"
         desc="Air compression technology to flush soreness and support faster turnaround between sessions."
-        bullets={["10–20 minute sessions", "Lower body & full-leg options", "Great add-on to IV or sauna"]}
+        bullets={["10–20 minute sessions", "Lower body & full-leg options", "Great add-on to IV Hydration or Sauna"]}
         imageSrc={IMG.compression}
         imageAlt="NormaTec compression"
         videoSrc="/videos/normatec.mp4"
         reverse
         extra={
           <>
-            <p>NormaTec compression uses dynamic air pressure to massage your legs, hips, or arms in rhythmic waves—improving circulation, flushing out toxins, and reducing muscle soreness. This active recovery method speeds healing, reduces swelling, and leaves your body feeling refreshed and recharged.</p>
-            <p className="mt-3">Many athletes and busy professionals use compression therapy to bounce back faster, fight fatigue, and keep moving at their best. Just one session can help you feel lighter, looser, and ready for whatever comes next.</p>
+            <p>NormaTec compression uses gentle, rhythmic air pressure to help you feel relaxed, restored, and re-energized. Each session provides a soothing, active recovery experience that promotes circulation, comfort, and balance for both athletes and busy professionals.</p>
+           
           </>
         }
         primaryCta="Book Compression"
       />
 
       <section id="functional" className={`${section} py-12 md:py-16`}>
-        <SectionHeader overline="Long-Term Health" title="Functional Medicine & Testing" desc="Move beyond quick fixes. We identify root causes and build targeted protocols." />
+        <SectionHeader overline="Long-Term Health" title="Functional Medicine & Testing" desc="Comprehensive wellness evaluations designed to provide deeper insights into your health and performance." />
         <FunctionalRotator />
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
           {functionalCards.map((b) => (
@@ -1138,7 +1118,7 @@ export default function SummitWellnessSite() {
 
       {testimonials.length > 0 && (
         <section id="reviews" className={`${section} py-12 md:py-16`}>
-          <SectionHeader overline="Results" title="What Clients Say" />
+          <SectionHeader overline="Results" title="What Clients Say*"/>
           <div className="grid md:grid-cols-3 gap-6">
             {testimonials.map((quote, idx) => (
               <Card key={idx} className="bg-zinc-900/60 border-zinc-800">
@@ -1148,11 +1128,14 @@ export default function SummitWellnessSite() {
               </Card>
             ))}
           </div>
+          <p className="mt-6 text-center text-xs text-zinc-500">
+            *Individual experiences vary. Services are not intended to diagnose, treat, or cure medical conditions.
+          </p>
         </section>
       )}
 
       <section id="contact" className={`${section} py-12 md:py-20`}>
-        <SectionHeader overline="Get In Touch" title="Questions, Teams, Events" desc="Tell us what you need—same-day options often available for mobile IVs and recovery sessions." />
+        <SectionHeader overline="Get In Touch" title="Questions, Teams, Events" desc="Tell us what you need—same-day options often available for mobile IV hydration and wellness sessions." />
         <ContactForm />
       </section>
 
@@ -1169,9 +1152,9 @@ export default function SummitWellnessSite() {
             <div className="text-zinc-300 font-medium mb-3">Services</div>
             <ul className="space-y-2 text-zinc-400">
               <li>IV Therapy (Mobile + In-Studio)</li>
-              <li>Injections (Tri-Immune, NAD+, B12)</li>
-              <li>IR Sauna & Cold Plunge</li>
-              <li>Hyperbaric Oxygen</li>
+              <li>Injections (Vitamin & Nutrient-Based)</li>
+              <li>Infrared Sauna & Cold Plunge</li>
+              <li>Hyperbaric Oxygen Sessions</li>
               <li>NormaTec Compression</li>
             </ul>
           </div>
@@ -1179,10 +1162,10 @@ export default function SummitWellnessSite() {
             <div className="text-zinc-300 font-medium mb-3">Programs</div>
             <ul className="space-y-2 text-zinc-400">
               <li>Memberships (Unlimited)</li>
-              <li>Protocols & Packages</li>
-              <li>Functional Medicine</li>
-              <li>GI-MAP & Labs</li>
-              <li>Peptide Therapy</li>
+              <li>Custom Wellness Packages</li>
+              <li>Functional Wellness</li>
+              <li>GI-MAP & Wellness Testing</li>
+              <li>Peptide Consultations</li>
             </ul>
           </div>
           <div>
