@@ -697,23 +697,62 @@ function FunctionalRotator() {
 
 function useSmoothAnchors(offset: number = 80) {
   React.useEffect(() => {
+    const scrollToHash = (hash: string) => {
+      if (!hash || hash.length < 2) return;
+      const el = document.querySelector(hash) as HTMLElement | null;
+      if (!el) return;
+      const y = el.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({ top: y, behavior: "smooth" });
+    };
+
     const handler = (e: MouseEvent) => {
-      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      if (
+        e.defaultPrevented ||
+        e.button !== 0 ||
+        e.metaKey ||
+        e.ctrlKey ||
+        e.shiftKey ||
+        e.altKey
+      )
+        return;
+
       const t = e.target as HTMLElement | null;
       const a = t?.closest('a[href^="#"]') as HTMLAnchorElement | null;
       if (!a) return;
+
       const href = a.getAttribute("href") || "";
       if (!href.startsWith("#") || href.length < 2) return;
+
       const el = document.querySelector(href) as HTMLElement | null;
       if (!el) return;
+
       e.preventDefault();
       const y = el.getBoundingClientRect().top + window.scrollY - offset;
       window.scrollTo({ top: y, behavior: "smooth" });
     };
+
     document.addEventListener("click", handler);
-    return () => document.removeEventListener("click", handler);
+
+    // ⭐ NEW: Handle external links like summitwellnessoba.com/#contact
+    if (window.location.hash) {
+      setTimeout(() => {
+        scrollToHash(window.location.hash);
+      }, 0); // allow React to finish rendering sections
+    }
+
+    // ⭐ Optional: also scroll on hash changes (back/forward)
+    const onHashChange = () => {
+      scrollToHash(window.location.hash);
+    };
+    window.addEventListener("hashchange", onHashChange);
+
+    return () => {
+      document.removeEventListener("click", handler);
+      window.removeEventListener("hashchange", onHashChange);
+    };
   }, [offset]);
 }
+
 
 function ServicesDropdown() {
   const items = [
