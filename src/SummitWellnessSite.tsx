@@ -118,8 +118,8 @@ const h2 = "text-3xl md:text-4xl font-semibold tracking-tight";
 const p = "text-base md:text-lg text-zinc-300";
 
 const features = [
-  { icon: Droplet, id: "iv", title: "IV Therapy", desc: "Hydration, performance, recovery, and wellness IV protocols - administered by licensed nurses in-studio or through our mobile service."},
-  { icon: Syringe, id: "injections", title: "Injections", desc: "Personalized wellness injections designed to support hydration, recovery, and overall vitality - provided by licensed clinical staff."},
+  { icon: Droplet, id: "iv", title: "IV Therapy", desc: "Hydration, performance, recovery, and wellness IV protocols - administered by licensed nurses in-studio or through our mobile service." },
+  { icon: Syringe, id: "injections", title: "Injections", desc: "Personalized wellness injections designed to support hydration, recovery, and overall vitality - provided by licensed clinical staff." },
   { icon: ThermometerSnowflake, id: "plunge", title: "Cold Plunge", desc: "Chilled immersion designed to help refresh, reset, and invigorate the body. Pair with sauna sessions for a balanced contrast experience." },
   { icon: Flame, id: "sauna", title: "Full-Spectrum IR Sauna", desc: "Experience gentle, full-spectrum infrared heat at temperatures up to 160 degrees designed to promote relaxation and rejuvenation." },
   { icon: HeartPulse, id: "hbot", title: "Hyperbaric Chamber", desc: "Personalized hyperbaric sessions designed to support relaxation, energy, and overall wellness." },
@@ -609,9 +609,9 @@ import { Instagram, Youtube, Facebook, Music2 } from "lucide-react";
 function SocialLinks() {
   const links = [
     { href: "https://www.instagram.com/summit.wellness.oba", label: "Instagram", Icon: Instagram },
-    { href: "https://www.youtube.com/@SummitWellnessOBA",     label: "YouTube",   Icon: Youtube   },
-    { href: "https://www.tiktok.com/@summit.wellness.oba",    label: "TikTok",    Icon: Music2    }, // musical note icon
-    { href: "https://www.facebook.com/summitwellnessoba",     label: "Facebook",  Icon: Facebook  },
+    { href: "https://www.youtube.com/@SummitWellnessOBA", label: "YouTube", Icon: Youtube },
+    { href: "https://www.tiktok.com/@summit.wellness.oba", label: "TikTok", Icon: Music2 }, // musical note icon
+    { href: "https://www.facebook.com/summitwellnessoba", label: "Facebook", Icon: Facebook },
   ];
 
   return (
@@ -638,7 +638,7 @@ function SocialLinks() {
 function FunctionalRotator() {
   const slides: string[][] = [
     [IMG.gi],
-    [IMG.supplements1_jpg], 
+    [IMG.supplements1_jpg],
     [IMG.supplements2],
     [IMG.supplements3],
     [IMG.salt],
@@ -757,12 +757,13 @@ function useSmoothAnchors(offset: number = 80) {
 function ServicesDropdown() {
   const items = [
     { href: "#iv", label: "IV Hydration" },
+    { href: "#functional", label: "Functional Medicine & Testing" },
     { href: "#injections", label: "Injections" },
     { href: "#plunge", label: "Cold Plunge" },
     { href: "#sauna", label: "Infrared Sauna" },
     { href: "#hbot", label: "Hyperbaric Oxygen" },
     { href: "#compression", label: "NormaTec Compression" },
-    { href: "#functional", label: "Functional Medicine & Testing" },
+
   ];
 
   const [open, setOpen] = React.useState(false);
@@ -806,9 +807,8 @@ function ServicesDropdown() {
 
       <div
         role="menu"
-        className={`absolute left-0 top-full mt-2 min-w-[240px] rounded-xl border border-zinc-800 bg-zinc-950/95 backdrop-blur shadow-xl p-2 ${
-          open ? "block" : "hidden"
-        }`}
+        className={`absolute left-0 top-full mt-2 min-w-[240px] rounded-xl border border-zinc-800 bg-zinc-950/95 backdrop-blur shadow-xl p-2 ${open ? "block" : "hidden"
+          }`}
       >
         {items.map((i) => (
           <a
@@ -850,7 +850,7 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
 
   return (
     <div className="fixed inset-0 z-50 lg:hidden">
-      <button className="absolute inset-0 bg-black/50" aria-label="Close menu" onClick={onClose}/>
+      <button className="absolute inset-0 bg-black/50" aria-label="Close menu" onClick={onClose} />
       <div id="mobile-menu" className="absolute right-0 top-0 h-full w-[84%] max-w-sm bg-zinc-950 border-l border-zinc-800 shadow-2xl p-4 overflow-y-auto">
         <div className="flex items-center justify-between mb-2">
           <span className="text-zinc-300 text-sm tracking-widest">MENU</span>
@@ -863,13 +863,13 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
           <a href="/" className={linkCls} onClick={closeAnd()}>Home</a>
 
           <div className="mt-2 px-4 pt-3 pb-2 text-xs uppercase tracking-widest text-zinc-400">Services</div>
-          <a href="#iv"           className={linkCls} onClick={closeAnd()}>IV Therapy</a>
-          <a href="#injections"   className={linkCls} onClick={closeAnd()}>Injections</a>
-          <a href="#plunge"       className={linkCls} onClick={closeAnd()}>Cold Plunge</a>
-          <a href="#sauna"        className={linkCls} onClick={closeAnd()}>Infrared Sauna</a>
-          <a href="#hbot"         className={linkCls} onClick={closeAnd()}>Hyperbaric Chamber</a>
-          <a href="#compression"  className={linkCls} onClick={closeAnd()}>NormaTec Compression</a>
-          <a href="#functional"   className={linkCls} onClick={closeAnd()}>Functional Medicine & Testing</a>
+          <a href="#iv" className={linkCls} onClick={closeAnd()}>IV Therapy</a>
+          <a href="#injections" className={linkCls} onClick={closeAnd()}>Injections</a>
+          <a href="#plunge" className={linkCls} onClick={closeAnd()}>Cold Plunge</a>
+          <a href="#sauna" className={linkCls} onClick={closeAnd()}>Infrared Sauna</a>
+          <a href="#hbot" className={linkCls} onClick={closeAnd()}>Hyperbaric Chamber</a>
+          <a href="#compression" className={linkCls} onClick={closeAnd()}>NormaTec Compression</a>
+          <a href="#functional" className={linkCls} onClick={closeAnd()}>Functional Medicine & Testing</a>
 
           <div className="mt-2 px-4 pt-3 pb-2 text-xs uppercase tracking-widest text-zinc-400">Company</div>
           <a href="#reviews" className={linkCls} onClick={closeAnd()}>Reviews</a>
@@ -952,7 +952,7 @@ export default function SummitWellnessSite() {
         </div>
       </header>
 
-<MobileMenu open={mobileOpen} onClose={() => setMobileOpen(false)} />
+      <MobileMenu open={mobileOpen} onClose={() => setMobileOpen(false)} />
 
 
       <section className={`${section} pt-12 md:pt-20 pb-12`}>
@@ -1021,7 +1021,7 @@ export default function SummitWellnessSite() {
                 Clients choose us for three reasons – speed, standards, and results. Same-day mobile IVs and efficient in-studio sessions; licensed staff with MD oversight, and athlete-grade sanitation; protocols that are measured and adjusted, not guessed—based on your needs and goals.
               </p>
               <p className="text-sm mt-3">
-                 Our team blends practical experience with clinical precision. Every service is designed and supervised by medical professionals to ensure safety, consistency, and care you can trust.
+                Our team blends practical experience with clinical precision. Every service is designed and supervised by medical professionals to ensure safety, consistency, and care you can trust.
               </p>
               <p className="text-sm mt-3">
                 Whether you’re training, traveling, or recharging, Summit Wellness helps you stay balanced, recovered, and ready for what’s next. It’s not just about feeling better today—it’s about building resilience for tomorrow.</p>
@@ -1051,6 +1051,21 @@ export default function SummitWellnessSite() {
         extra="IV therapy delivers fluids and nutrients to help your body stay balanced, hydrated, and performing at its best. It’s a simple, efficient way to support recovery, energy, and overall wellness beyond what typical hydration can offer. Our IV hydration sessions help restore balance, promote hydration, and support your active lifestyle. Each session is guided by our clinical team to complement your wellness goals and leave you feeling refreshed."
         primaryCta="Book an IV"
       />
+
+      <section id="functional" className={`${section} py-12 md:py-16`}>
+        <SectionHeader overline="Long-Term Health" title="Functional Medicine & Testing" desc="Comprehensive wellness evaluations designed to provide deeper insights into your health and performance." />
+        <FunctionalRotator />
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+          {functionalCards.map((b) => (
+            <Card key={b.title} className="bg-zinc-900/60 border-zinc-800">
+              <CardHeader><CardTitle className="text-zinc-100">{b.title}</CardTitle></CardHeader>
+              <CardContent><p className="text-zinc-300">{b.desc}</p></CardContent>
+            </Card>
+          ))}
+        </div>
+        <div className="text-center mt-8"><Button asChild><a href="#contact">Book a Consult</a></Button></div>
+      </section>
+
 
       <ServiceBlock
         id="injections"
@@ -1092,7 +1107,7 @@ export default function SummitWellnessSite() {
         videoSrc="/videos/sauna.mp4"
         extra={
           <>
-            <p>Infrared saunas use gentle light-based warmth that’s absorbed directly by your body—creating a soothing, restorative experience at a comfortable temperature. 
+            <p>Infrared saunas use gentle light-based warmth that’s absorbed directly by your body—creating a soothing, restorative experience at a comfortable temperature.
               The combination of infrared and red-light wavelengths encourages balance, calm, and overall vitality while supporting relaxation from the inside out. </p>
           </>
         }
@@ -1129,25 +1144,13 @@ export default function SummitWellnessSite() {
         extra={
           <>
             <p>NormaTec compression uses gentle, rhythmic air pressure to help you feel relaxed, restored, and re-energized. Each session provides a soothing, active recovery experience that promotes circulation, comfort, and balance for both athletes and busy professionals.</p>
-           
+
           </>
         }
         primaryCta="Book Compression"
       />
 
-      <section id="functional" className={`${section} py-12 md:py-16`}>
-        <SectionHeader overline="Long-Term Health" title="Functional Medicine & Testing" desc="Comprehensive wellness evaluations designed to provide deeper insights into your health and performance." />
-        <FunctionalRotator />
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
-          {functionalCards.map((b) => (
-            <Card key={b.title} className="bg-zinc-900/60 border-zinc-800">
-              <CardHeader><CardTitle className="text-zinc-100">{b.title}</CardTitle></CardHeader>
-              <CardContent><p className="text-zinc-300">{b.desc}</p></CardContent>
-            </Card>
-          ))}
-        </div>
-        <div className="text-center mt-8"><Button asChild><a href="#contact">Book a Consult</a></Button></div>
-      </section>
+
 
       <section id="pricing" className={`${section} py-12 md:py-16`}>
         <SectionHeader overline="Transparent" title="Sample Pricing" desc="Exact pricing varies by formulation, duration, and membership status." />
@@ -1157,7 +1160,7 @@ export default function SummitWellnessSite() {
 
       {testimonials.length > 0 && (
         <section id="reviews" className={`${section} py-12 md:py-16`}>
-          <SectionHeader overline="Results" title="What Clients Say*"/>
+          <SectionHeader overline="Results" title="What Clients Say*" />
           <div className="grid md:grid-cols-3 gap-6">
             {testimonials.map((quote, idx) => (
               <Card key={idx} className="bg-zinc-900/60 border-zinc-800">
