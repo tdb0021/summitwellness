@@ -864,12 +864,13 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
 
           <div className="mt-2 px-4 pt-3 pb-2 text-xs uppercase tracking-widest text-zinc-400">Services</div>
           <a href="#iv" className={linkCls} onClick={closeAnd()}>IV Therapy</a>
+          <a href="#functional" className={linkCls} onClick={closeAnd()}>Functional Medicine & Testing</a>
           <a href="#injections" className={linkCls} onClick={closeAnd()}>Injections</a>
           <a href="#plunge" className={linkCls} onClick={closeAnd()}>Cold Plunge</a>
           <a href="#sauna" className={linkCls} onClick={closeAnd()}>Infrared Sauna</a>
           <a href="#hbot" className={linkCls} onClick={closeAnd()}>Hyperbaric Chamber</a>
           <a href="#compression" className={linkCls} onClick={closeAnd()}>NormaTec Compression</a>
-          <a href="#functional" className={linkCls} onClick={closeAnd()}>Functional Medicine & Testing</a>
+          
 
           <div className="mt-2 px-4 pt-3 pb-2 text-xs uppercase tracking-widest text-zinc-400">Company</div>
           <a href="#reviews" className={linkCls} onClick={closeAnd()}>Reviews</a>
